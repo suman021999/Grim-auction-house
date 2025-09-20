@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+
+@font-face {
+    font-family: font1;
+    src: url(../public/fonts/MagicSchoolOne.ttf);
+}
+@font-face {
+    font-family: font2;
+    src: url(../public/fonts/MoldieDemo.otf);
+}
+@font-face {
+    font-family: font3;
+    src: url(../public/fonts/Trotes.ttf);
+}
