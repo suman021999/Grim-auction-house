@@ -69,6 +69,22 @@
 
 
 
+/* Custom box shadow */
+.shadowBox{
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.575);
+  border-radius: 1.5rem; /* match your rounded-3xl */
+}
+
+
+/*fhfgh*/
+
+.ddd{
+  background: (rgba(20, 26, 14, 0.8), rgba(79, 164, 9, 0.8))
+}
+
+
+
+
 
 
 /* .scroll-animation:hover {

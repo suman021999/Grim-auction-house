@@ -1,10 +1,14 @@
 import React from "react";
 import Navbar from "../Navigation/Navbar";
 import { data1 } from "../../../data/data";
+import bannerImg from "../../../public/banner.png"
 
 const Banner = () => {
   return (
-    <section className="w-full bg-lightBg py-6 md:py-10">
+    <section 
+    className="w-full  py-6 md:py-10"
+    style={{ backgroundImage: `url(${bannerImg})` }}
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20 mb-8">
         <Navbar />
         <div className="flex flex-col md:flex-row mt-8 md:mt-16 w-full">

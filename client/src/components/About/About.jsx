@@ -1,20 +1,21 @@
 import React from "react";
 import RollingGallery from "../../common/RollingGallery";
-
+import aboutImg from "../../../public/about.png";
 
 const About = () => {
   return (
-    <section className="w-full  py-4 md:py-16 lg:py-20">
-
+    <section
+      className="bg-midBg py-4 md:py-16 lg:py-20 m-10 rounded-3xl shadowBox  "
+      style={{
+        backgroundImage: `linear-gradient(rgba(80,111,54,0.8), rgba(80,111,54,0.8)), url(${aboutImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20 flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
-        
         {/* Left Section - Image/Card */}
-        <div className="left w-full md:w-1/2 md:items-center flex justify-center md:justify-start">
-
-         <RollingGallery autoplay={true} pauseOnHover={true} />
-
-  
-
+        <div className="left w-full md:w-1/2 mt-0 sm:mt-48 md:mt-44 lg:mt-36 xl:mt-0 flex justify-center items-center">
+          <RollingGallery autoplay={true} pauseOnHover={true} />
         </div>
 
         {/* Right Section - Text */}
@@ -27,12 +28,12 @@ const About = () => {
             collectors, dreamers, and investors from around the world. At Grim,
             every item tells a story — from timeless watches and fine jewelry to
             luxury cars and rare art. Our mission is simple: to create a trusted
-            space where passion meets opportunity, and where treasures find their
-            true owners. With innovation, transparency, and integrity at our
-            core, Grim is more than an auction house — it’s where legacies begin.
+            space where passion meets opportunity, and where treasures find
+            their true owners. With innovation, transparency, and integrity at
+            our core, Grim is more than an auction house — it’s where legacies
+            begin.
           </p>
         </div>
-
       </div>
     </section>
   );

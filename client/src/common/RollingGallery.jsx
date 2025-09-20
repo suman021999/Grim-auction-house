@@ -132,9 +132,9 @@ const RollingGallery = ({ autoplay = false, pauseOnHover = false, images = [] })
               <img
                 src={url}
                 alt="gallery"
-                className="pointer-events-none h-[120px] w-[300px]  lg:w-[185px] md:w-[185px]  rounded-[15px] border-[3px] border-white object-cover
+                className="pointer-events-none h-[120px] w-[300px]  lg:w-[180px] md:w-[180px]  rounded-[15px] border-[3px] border-white object-cover
                            transition-transform duration-300 ease-out group-hover:scale-105
-                           sm:h-[100px] sm:w-[220px]"  //fix problem here
+                           sm:h-[100px] sm:w-[180px]"  //fix problem here
               />
             </div>
           ))}
