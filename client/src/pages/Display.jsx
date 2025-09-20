@@ -1,6 +1,7 @@
 import React from 'react'
 import Banner from '../components/Banner/Banner'
 import Categories from '../components/Categories/Categories'
+import About from '../components/About/About'
 
 
 const Display = () => {
@@ -10,6 +11,7 @@ const Display = () => {
         
         <Banner/>
         <Categories/>
+        <About/>
       </section>
     </>
   )

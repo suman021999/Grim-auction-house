@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 
+
+/* bg-[#a5f06863] text-[#92ad67] */
+
 @font-face {
     font-family: font1;
     src: url(../public/fonts/MagicSchoolOne.ttf);
@@ -13,3 +16,61 @@
     font-family: font3;
     src: url(../public/fonts/Trotes.ttf);
 }
+
+@theme {
+  --color-lightBg: #a5f06863;
+  --color-midBg: #78c43aa7;
+  --color-customGreen1:#92ad67 ;
+  --color-customGreen2: #98cd45;
+  --color-customGreen3: #689c14;
+}
+
+.scroll-wrapper-y {
+  height: 100%;
+  overflow: hidden;
+}
+
+.scroll-animation-y1 {
+  animation: scroll-down-1 30s linear infinite;
+}
+.scroll-animation-y2 {
+  animation: scroll-up-2 30.5s linear infinite;
+}
+.scroll-animation-y3 {
+  animation: scroll-down-3 31s linear infinite;
+}
+
+@keyframes scroll-down-1 {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes scroll-up-2 {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scroll-down-3 {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+/* .scroll-animation:hover {
+  animation-play-state: paused;
+} */

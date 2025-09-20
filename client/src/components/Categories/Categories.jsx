@@ -35,10 +35,10 @@ const Categories = () => {
           return (
             <div
               key={cat.id}
-              className="font-[font3] text-4xl md:text-5xl lg:text-6xl flex flex-col items-center justify-center bg-[#386514a7] w-20 h-20 md:w-32 md:h-32 lg:w-44 lg:h-44 rounded-lg md:rounded-xl transition-transform hover:scale-105 text-white"
+              className="font-[font3] text-4xl md:text-5xl lg:text-6xl flex flex-col items-center justify-center bg-midBg w-20 h-20 md:w-32 md:h-32 lg:w-44 lg:h-44 rounded-lg md:rounded-xl transition-transform hover:scale-105 text-white"
             >
               <Icon className="w-10 h-10 md:w-14 md:h-14 lg:w-20 lg:h-20" />
-              <span className="mt-2 text-xs md:text-sm lg:text-base">{cat.name}</span>
+              <span className="mt-2 text-xs md:text-sm lg:text-base text-customGreen3">{cat.name}</span>
             </div>
           );
         })}
