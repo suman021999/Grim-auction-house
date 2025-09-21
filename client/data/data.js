@@ -95,16 +95,16 @@ export const data2=[
   }
 ];
 
-export const macanisum=[
+export const mechanism=[
   {
     id:1,
-    icon:"users",
+    icon:"login",
     title:'Sign Up',
     text:'Create your free account in just a few clicks. Once registered, you’ll gain full access to upcoming auctions, exclusive previews, and personalized recommendations.'
   },
   {
     id:2,
-    icon:"online",
+    icon:"online_auction",
     title:' Auction Goes Online',
     text:'When the auction opens, explore items in detail with photos, descriptions, and starting bids. Join the excitement by placing your bids live, competing in real time with collectors worldwide.'
   },

@@ -1,6 +1,6 @@
 import React from "react";
 import RollingGallery from "../../common/RollingGallery";
-import aboutImg from "../../../public/about.png";
+import aboutImg from "../../../public/backgrounds/about.png";
 
 const About = () => {
   return (

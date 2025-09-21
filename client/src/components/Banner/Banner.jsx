@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Navigation/Navbar";
 import { data1 } from "../../../data/data";
-import bannerImg from "../../../public/banner.png"
+import bannerImg from "../../../public/backgrounds/banner.png"
 
 const Banner = () => {
   return (
@@ -36,7 +36,7 @@ const Banner = () => {
                 {data1.concat(data1).map((item, i) => (
                   <img
                     key={`col1-${i}`}
-                    src={item.img}
+                    src={`/scroll_images/${item.img}`}
                     alt={`col1-${i}`}
                     className="w-52 h-64 object-cover rounded-lg"
                   />
@@ -50,7 +50,7 @@ const Banner = () => {
                 {data1.concat(data1).map((item, i) => (
                   <img
                     key={`col2-${i}`}
-                    src={item.img}
+                    src={`/scroll_images/${item.img}`}
                     alt={`col2-${i}`}
                     className="w-52  h-64 object-cover rounded-lg"
                   />
@@ -64,7 +64,7 @@ const Banner = () => {
                 {data1.concat(data1).map((item, i) => (
                   <img
                     key={`col3-${i}`}
-                    src={item.img}
+                    src={`/scroll_images/${item.img}`}
                     alt={`col3-${i}`}
                     className="w-52 h-64 object-cover rounded-lg"
                   />

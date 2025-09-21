@@ -68,19 +68,19 @@ export default function AuctionCard() {
           <div className="flex items-center space-x-4 text-center">
             <div>
               <div className="text-2xl font-bold text-gray-900">{timeLeft.days}</div>
-              <div className="text-xs text-gray-500">Days</div>
+              <div className="text-xs font-[font3] text-gray-500">Days</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">{timeLeft.hours}</div>
-              <div className="text-xs text-gray-500">Hours</div>
+              <div className="text-xs font-[font3] text-gray-500">Hours</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">{timeLeft.minutes}</div>
-              <div className="text-xs text-gray-500">Minutes</div>
+              <div className="text-xs font-[font3] text-gray-500">Minutes</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-gray-900">{timeLeft.seconds}</div>
-              <div className="text-xs text-gray-500">Seconds</div>
+              <div className="text-xs font-[font3] text-gray-500">Seconds</div>
             </div>
           </div>
         </div>
@@ -88,19 +88,27 @@ export default function AuctionCard() {
 
       {/* Content Section */}
       <div className="p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 leading-tight">
+        <h2 className="text-xl font-[font3] font-semibold text-gray-900 mb-4 leading-tight">
           Canvas & culture brush within elegance auction.
         </h2>
         
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500 mb-1">Current bid:</p>
+        <div className="flex items-center justify-between gap-2">
+          
+            <div>
+            <p className="text-sm text-gray-500 mb-1 font-[font3]">Current bid:</p>
             <p className="text-2xl font-bold text-gray-900">$9,900.00</p>
           </div>
-          <button className="bg-black group-hover:bg-orange-900 text-white px-6 py-1 rounded-lg font-medium transition-colors">
+          <span className="border-1 h-10 mt-10"></span>
+          <div>
+            <p className="text-sm font-[font3] text-customGreen4 mb-1 capitalize ">buy now:</p>
+            <p className="text-2xl text-customGreen4  font-bold ">$9,900.00</p>
+          
+          </div>
+          
+        </div>
+        <button className="bg-black my-2 group-hover:bg-orange-900 text-white px-6 py-1 rounded-lg font-medium transition-colors">
             Bid Now
           </button>
-        </div>
       </div>
     </section>
   );
