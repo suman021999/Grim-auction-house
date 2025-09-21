@@ -16,14 +16,22 @@
     font-family: font3;
     src: url(../public/fonts/Trotes.ttf);
 }
+@font-face {
+    font-family: font4;
+    src: url(../public/fonts/GCRoseMarineDemo.ttf);
+}
 
 @theme {
   --color-lightBg: #a5f06863;
   --color-midBg: #78c43aa7;
+  --color-darkBg: #2f5113ac;
   --color-customGreen1:#92ad67 ;
   --color-customGreen2: #98cd45;
   --color-customGreen3: #689c14;
-  --color-customGreen4:#b64c4c
+  --color-customGreen4:#b64c4c;
+  --color-customGreen5:#538700a8;
+  --color-customGreen6:#97ec0e;
+  --color-customGreen7:#334e06;
 }
 
 .scroll-wrapper-y {

@@ -88,7 +88,7 @@ export default function AuctionCard() {
 
       {/* Content Section */}
       <div className="p-6">
-        <h2 className="text-xl font-[font3] font-semibold text-gray-900 mb-4 leading-tight">
+        <h2 className="text-xl font-[font3] font-semibold text-customGreen3 mb-4 leading-tight">
           Canvas & culture brush within elegance auction.
         </h2>
         

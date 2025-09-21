@@ -1,63 +1,62 @@
-export const data1=[
+export const data1 = [
   {
-  "id":1,
-  "img":"/Arts.png"
-  },
-  {
-  "id":2,
-  "img":"/cars.jpg"
+    id: 1,
+    img: "/Arts.png",
   },
   {
-  "id":3,
-  "img":"/dress.jpg"
+    id: 2,
+    img: "/cars.jpg",
   },
   {
-  "id":4,
-  "img":"/gun.jpg"
+    id: 3,
+    img: "/dress.jpg",
   },
   {
-  "id":5,
-  "img":"/Real Estate.jpg"
+    id: 4,
+    img: "/gun.jpg",
   },
   {
-  "id":6,
-  "img":"/Jewellery.jpg"
+    id: 5,
+    img: "/Real Estate.jpg",
   },
   {
-  "id":7,
-  "img":"/electronices.jpg"
+    id: 6,
+    img: "/Jewellery.jpg",
   },
   {
-  "id":8,
-  "img":"/sports.jpg"
+    id: 7,
+    img: "/electronices.jpg",
   },
-    {
-  "id":9,
-  "img":"/watches.jpg"
+  {
+    id: 8,
+    img: "/sports.jpg",
   },
-      {
-  "id":10,
-  "img":"/wine.jpg"
+  {
+    id: 9,
+    img: "/watches.jpg",
   },
-        {
-  "id":11,
-  "img":"/dress22.webp"
-  }
-]
+  {
+    id: 10,
+    img: "/wine.jpg",
+  },
+  {
+    id: 11,
+    img: "/dress22.webp",
+  },
+];
 
-export const data2=[
-  { "id": 1, "name": "Watches", "icon": "Watch" },
-  { "id": 2, "name": "Electronics", "icon": "Plug" },
-  { "id": 3, "name": "Jewelry", "icon": "Gem" },
-  { "id": 4, "name": "Sports", "icon": "Volleyball" },
-  { "id": 5, "name": "Vehicles", "icon": "Car" },
-  { "id": 6, "name": "Clothes", "icon": "Shirt" },
-  { "id": 7, "name": "Real Estate", "icon": "HousePlus" },
-  { "id": 8, "name": "Arts", "icon": "Palette" }
-]
+export const data2 = [
+  { id: 1, name: "Watches", icon: "Watch" },
+  { id: 2, name: "Electronics", icon: "Plug" },
+  { id: 3, name: "Jewelry", icon: "Gem" },
+  { id: 4, name: "Sports", icon: "Volleyball" },
+  { id: 5, name: "Vehicles", icon: "Car" },
+  { id: 6, name: "Clothes", icon: "Shirt" },
+  { id: 7, name: "Real Estate", icon: "HousePlus" },
+  { id: 8, name: "Arts", icon: "Palette" },
+];
 
-
- export const auctions = [
+export const auctions = [
   {
     id: 1,
     title: "Canvas & culture brush within elegance auction.",
@@ -92,33 +91,101 @@ export const data2=[
     price: "$12,500.00",
     image:
       "https://probid-wp.egenstheme.com/antiques-auction/wp-content/uploads/sites/8/2024/10/product-14-1.webp",
-  }
+  },
 ];
 
-export const mechanism=[
+export const mechanism = [
   {
-    id:1,
-    icon:"login",
-    title:'Sign Up',
-    text:'Create your free account in just a few clicks. Once registered, you’ll gain full access to upcoming auctions, exclusive previews, and personalized recommendations.'
+    id: 1,
+    icon: "login",
+    title: "Sign Up",
+    text: "Create your free account in just a few clicks. Once registered, you’ll gain full access to upcoming auctions, exclusive previews, and personalized recommendations.",
   },
   {
-    id:2,
-    icon:"online_auction",
-    title:' Auction Goes Online',
-    text:'When the auction opens, explore items in detail with photos, descriptions, and starting bids. Join the excitement by placing your bids live, competing in real time with collectors worldwide.'
+    id: 2,
+    icon: "online_auction",
+    title: " Auction Goes Online",
+    text: "When the auction opens, explore items in detail with photos, descriptions, and starting bids. Join the excitement by placing your bids live, competing in real time with collectors worldwide.",
   },
   {
-    id:3,
-    icon:"closing_auction",
-    title:'Closing Auctions',
-    text:'As the countdown ticks away, watch the competition heat up. The highest bidder at the end secures the item so stay sharp and be ready to place your final offer before time runs out.'
+    id: 3,
+    icon: "closing_auction",
+    title: "Closing Auctions",
+    text: "As the countdown ticks away, watch the competition heat up. The highest bidder at the end secures the item so stay sharp and be ready to place your final offer before time runs out.",
   },
   {
-    id:4,
-    icon:"last_stap",
-    title:'The Last Step',
-    text:'After winning, complete your purchase with our secure payment system. Choose convenient delivery options, and soon your newly won treasure will arrive safely at your door.'
+    id: 4,
+    icon: "last_stap",
+    title: "The Last Step",
+    text: "After winning, complete your purchase with our secure payment system. Choose convenient delivery options, and soon your newly won treasure will arrive safely at your door.",
   },
-]
+];
 
+export const company = [
+  {
+    id: 1,
+    logo: "ansbank",
+  },
+  {
+    id: 2,
+    logo: "crocs",
+  },
+  {
+    id: 3,
+    logo: "discord",
+  },
+  {
+    id: 4,
+    logo: "laravel",
+  },
+  {
+    id: 5,
+    logo: "stanford",
+  },
+  {
+    id: 6,
+    logo: "techmahindra",
+  },
+  {
+    id: 7,
+    logo: "oneplus",
+  },
+  {
+    id: 8,
+    logo: "svelte",
+  },
+  ,
+  {
+    id: 9,
+    logo: "varcel",
+  },
+  {
+    id: 10,
+    logo: "weeworld",
+  },
+];
+export const faqData = [
+  {
+    id: 1,
+    question: "What is this platform about?",
+    answer:
+      "We are a trusted bidding marketplace connecting businesses with quality products and opportunities to grow.",
+  },
+  {
+    id: 2,
+    question: "How many businesses trust this platform?",
+    answer: "Over 500+ businesses already trust and use our platform worldwide.",
+  },
+  {
+    id: 3,
+    question: "Is it free to join?",
+    answer:
+      "Yes! You can join for free and explore opportunities. Premium features are available for scaling businesses.",
+  },
+  {
+    id: 4,
+    question: "How do I get started?",
+    answer:
+      "Simply create an account, browse available products, and start bidding to connect with sellers.",
+  },
+];

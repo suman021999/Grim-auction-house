@@ -25,7 +25,7 @@ const iconMap = {
 
 const Categories = () => {
   return (
-    <section className="py-8 md:py-12 lg:py-16">
+    <section id="browse" className="py-8 md:py-12 lg:py-16">
       <h2 className="font-[font3] text-customGreen3 mx-10 mb-6 md:mb-8 lg:mb-10 text-xl md:text-2xl lg:text-3xl">
         Browse the Categories
       </h2>

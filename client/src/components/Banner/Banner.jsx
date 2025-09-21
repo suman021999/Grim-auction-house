@@ -6,6 +6,7 @@ import bannerImg from "../../../public/backgrounds/banner.png"
 const Banner = () => {
   return (
     <section 
+    id="#"
     className="w-full  py-6 md:py-10"
     style={{ backgroundImage: `url(${bannerImg})` }}
     >

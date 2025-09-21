@@ -3,7 +3,7 @@ import { mechanism } from "../../../data/data"; // make sure mechanism is export
 
 const How_It_Works = () => {
   return (
-    <section className="py-8 md:py-12 lg:py-16">
+    <section id="how-it-works" className="py-8 md:py-12 lg:py-16 ">
       {/* Title */}
       <h2 className="font-[font3] text-customGreen3 mx-10 mb-3 text-xl md:text-2xl lg:text-3xl">
         How It Works
@@ -18,7 +18,7 @@ const How_It_Works = () => {
           <div
             key={step.id}
             className="font-[font3] flex flex-col items-center justify-center 
-            bg-midBg w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 
+            bg-darkBg w-56 h-56 md:w-64 md:h-64 lg:w-68 lg:h-68 
             rounded-lg md:rounded-xl transition-transform hover:scale-105 p-4 text-center"
           >
             {/* Icon from public folder */}
@@ -29,7 +29,7 @@ const How_It_Works = () => {
             />
 
             {/* Title */}
-            <h3 className="mt-3 text-sm md:text-base lg:text-lg text-customGreen3">
+            <h3 className="mt-3 text-sm md:text-base lg:text-lg text-customGreen2">
               {step.title}
             </h3>
 
