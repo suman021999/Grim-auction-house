@@ -1,13 +1,13 @@
 import React from 'react'
-// import Dashboard from './Dashboard'
-import Display from './Display'
+import Dashboard from './Dashboard'
+// import Display from './Display'
 
 
 const MainPage = () => {
   return (
     <>
-      <Display/>
-      {/* <Dashboard/> */}
+      {/* <Display/> */}
+      <Dashboard/>
     </>
   )
 }
