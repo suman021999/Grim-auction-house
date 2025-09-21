@@ -1,5 +1,5 @@
 import React from "react";
-import { mechanism } from "../../../data/data"; // make sure mechanism is exported from your data file
+import { mechanism } from "../../../../data/data";
 
 const How_It_Works = () => {
   return (

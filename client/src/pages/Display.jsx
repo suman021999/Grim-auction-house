@@ -1,12 +1,12 @@
 import React from 'react'
-import Banner from '../components/Banner/Banner'
-import Categories from '../components/Categories/Categories'
-import About from '../components/About/About'
-import Live_Auction from '../components/LiveAuction/Live_Auction'
-import How_It_Works from '../components/how_its_works/How_It_Works'
-import Trust from '../components/Trust/Trust'
-import FAQ from '../components/FAQ/FAQ'
-import Contact from '../components/Contact/Contact'
+import Banner from '../components/das_components/Banner/Banner'
+import Categories from '../components/das_components/Categories/Categories'
+import About from '../components/das_components/About/About'
+import Live_Auction from '../components/das_components/LiveAuction/Live_Auction'
+import How_It_Works from '../components/das_components/how_its_works/How_It_Works'
+import Trust from '../components/das_components/Trust/Trust'
+import FAQ from '../components/das_components/FAQ/FAQ'
+import Contact from '../components/das_components/Contact/Contact'
 
 
 const Display = () => {

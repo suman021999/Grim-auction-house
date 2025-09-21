@@ -9,7 +9,7 @@ import {
   HousePlus,
   Palette,
 } from "lucide-react";
-import { data2 } from '../../../data/data';
+import { data2 } from '../../../../data/data';
 
 // Define the icon map
 const iconMap = {

@@ -1,6 +1,6 @@
 import React from "react";
-import AuctionCard from "../../common/AuctionTimer"
-import { auctions } from "../../../data/data";
+import AuctionCard from "../../../common/AuctionTimer"
+import { auctions } from "../../../../data/data";
 
 
 const Live_Auction = () => {

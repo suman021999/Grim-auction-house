@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Navigation/Navbar";
-import { data1 } from "../../../data/data";
-import bannerImg from "../../../public/backgrounds/banner.png"
+import { data1 } from "../../../../data/data";
+import bannerImg from "../../../../public/backgrounds/banner.png"
 
 const Banner = () => {
   return (

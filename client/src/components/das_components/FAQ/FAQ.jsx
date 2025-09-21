@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
-import { faqData } from "../../../data/data";
+import { faqData } from "../../../../data/data";
 
 const FAQ = () => {
   const [openId, setOpenId] = useState(null);
