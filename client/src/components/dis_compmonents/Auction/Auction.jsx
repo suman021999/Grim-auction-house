@@ -4,7 +4,7 @@ import Art from "../../../../public/scroll_images/Arts.png";
 
 const Auction = () => {
   return (
-    <section className="grid grid-cols-1 md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0">
+    <section className="grid grid-cols-1 m-4  md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0">
       {/* p-6 */}
       {/* Auction Details */}
       <div className="col-span-2 bg-white rounded-2xl shadow p-6">

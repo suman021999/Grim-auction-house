@@ -81,7 +81,12 @@ const Message = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+
+<>
+
+
+  <div className="flex flex-col h-screen md:flex-row  bg-gray-50">
+
       {/* Sidebar (Mobile overlay + Desktop fixed) */}
     <div
   className={`fixed lg:static top-0 left-0 h-full w-72
@@ -230,7 +235,10 @@ const Message = () => {
           </div>
         </div>
       </div>
-    </div>
+</div>
+
+</>
+    
   );
 };
 

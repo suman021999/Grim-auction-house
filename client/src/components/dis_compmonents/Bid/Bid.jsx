@@ -41,7 +41,7 @@ const bids = [
 
 const Bid = () => {
   return (
-    <section className="p-4 py-20 sm:py-20 md:py-0 ">
+    <section className="p-4 py-20 sm:py-20 md:py-0  m-4">
       <h2 className="text-xl font-bold mb-4">My Bids</h2>
 
       <div className="grid md:grid-cols-2 gap-6">

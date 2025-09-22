@@ -8,7 +8,8 @@ const Setting = () => {
   const [dataSharing, setDataSharing] = useState(false);
 
   return (
-    <div className="space-y-6">
+<>
+    <div className="space-y-6 m-4">
       <h1 className="text-2xl font-bold">Settings</h1>
 
       {/* Account Settings */}
@@ -141,6 +142,7 @@ const Setting = () => {
         </button>
       </div>
     </div>
+</>
   );
 };
 

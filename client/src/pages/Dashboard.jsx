@@ -12,7 +12,7 @@ const Dashboard = () => {
       <Sidebar />
 
       {/* Main content */}
-      <main className="flex-1 md:ml-64 p-4">
+      <main className="flex-1 md:ml-64 ">
         <Routes>
           <Route path="/" element={<Auction />} />
           <Route path="/my_bid" element={<Bid />} />
