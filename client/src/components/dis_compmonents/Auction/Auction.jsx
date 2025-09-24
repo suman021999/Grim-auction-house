@@ -3,11 +3,18 @@ import Chat from "../chat/Chat";
 import Art from "../../../../public/scroll_images/Arts.png";
 
 const Auction = () => {
+  // Bid history data
+  const bids = [
+    { id: 1, amount: "$1,250.00", user: "UserXYZ", time: "2 mins ago" },
+    { id: 2, amount: "$1,200.00", user: "Bidder123", time: "5 mins ago" },
+    { id: 3, amount: "$1,150.00", user: "AuctionFan", time: "10 mins ago" },
+  ];
+
   return (
-    <section className="grid grid-cols-1 m-4  md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0">
-      {/* p-6 */}
+    <section className="grid grid-cols-1 m-4 md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0">
+
       {/* Auction Details */}
-      <div className="col-span-2 bg-white rounded-2xl shadow p-6">
+      <div className="col-span-2  bg-white rounded-2xl shadow p-6">
         <div className="flex justify-between">
           <h2 className="text-xl font-bold mb-4">Vintage Grandfather Clock</h2>
           <p>Time</p>
@@ -41,37 +48,29 @@ const Auction = () => {
           </button>
         </div>
 
-        {/* Bid History */}
-        <div>
-          <h3 className="font-semibold mb-2">Bid History</h3>
-          <ul className="space-y-3 text-sm">
-            <li className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1">
-              <span className="font-medium">$1,250.00</span>
-              <span className="text-blue-600 hover:underline">by UserXYZ</span>
-              <span className="text-gray-400">2 mins ago</span>
-            </li>
-            <li className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1">
-              <span className="font-medium">$1,200.00</span>
-              <span className="text-blue-600 hover:underline">
-                by Bidder123
-              </span>
-              <span className="text-gray-400">5 mins ago</span>
-            </li>
-            <li className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1">
-              <span className="font-medium">$1,150.00</span>
-              <span className="text-blue-600 hover:underline">
-                by AuctionFan
-              </span>
-              <span className="text-gray-400">10 mins ago</span>
-            </li>
-          </ul>
-        </div>
+  {/* Bid History */}
+<div >
+  <h3 className="font-semibold mb-2">Bid History</h3>
+  <ul className="space-y-3 text-sm overflow-y-auto no-scrollbar max-h-24">
+    {bids.map((bid) => (
+      <li
+        key={bid.id}
+        className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1"
+      >
+        <span className="font-medium">{bid.amount}</span>
+        <span className="text-blue-600 hover:underline">by {bid.user}</span>
+        <span className="text-gray-400">{bid.time}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+
 
       </div>
 
       {/* Chat Section */}
-      <div className="bg-white rounded-2xl shadow ">
-        
+      <div className="bg-white rounded-2xl shadow">
         <Chat />
       </div>
     </section>
@@ -79,3 +78,4 @@ const Auction = () => {
 };
 
 export default Auction;
+

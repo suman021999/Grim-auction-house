@@ -37,18 +37,27 @@ const bids = [
     status: "ended",
     timeLeft: "Ended: 2 days ago",
   },
+    {
+    id: 4,
+    title: "Vintage Leather Briefcase",
+    img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
+    yourBid: 180,
+    currentBid: 180,
+    status: "ended",
+    timeLeft: "Ended: 2 days ago",
+  },
 ];
 
 const Bid = () => {
   return (
-    <section className="p-4 py-20 sm:py-20 md:py-0  m-4">
+    <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
       <h2 className="text-xl font-bold mb-4">My Bids</h2>
 
       <div className="grid md:grid-cols-2 gap-6">
         {bids.map((bid) => (
           <div
-            key={bid.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden border"
+          key={bid.id}
+          className="bg-white rounded-xl shadow-md overflow-hidden border"
           >
             <img src={bid.img} alt={bid.title} className="w-full h-48 object-cover" />
             <div className="p-4 space-y-2">

@@ -65,25 +65,33 @@ const Chat = () => {
         ))}
       </div>
       {/* Divider */}
-      <div className="border-t  border-gray-300" />
+      <div className="border-t mb-4  border-gray-300" />
 
-      {/* Input */}
-      <div className="flex pt-2 items-center p-2 gap-2">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Type your message..."
-          className="flex-1 rounded-lg p-2 text-sm outline-none"
-        />
-        <button
-          onClick={handleSend}
-          className="bg-blue-600 text-white px-2 py-2 rounded-lg"
-        >
-          <Send />
-        </button>
-      </div>
+{/* Input */}
+<div className="relative pt-2 items-center p-2  gap-2">
+  <input
+    type="text"
+    value={newMessage}
+    onChange={(e) => setNewMessage(e.target.value)}
+    onKeyDown={(e) => e.key === "Enter" && handleSend()}
+    placeholder="Type your message..."
+    className="flex-1 w-full rounded-lg p-2 text-sm outline-none  border-gray-300 pr-12" 
+  />
+
+  {/* Send Button */}
+  <button
+    onClick={handleSend}
+    className="
+      bg-blue-600 text-white w-10 h-10 rounded-lg flex items-center justify-center hover:bg-blue-700 transition
+      md:absolute md:bottom-2 md:right-2
+    "
+  >
+    <Send className="w-5 h-5" />
+  </button>
+</div>
+
+
+
       </div>
 
      

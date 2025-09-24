@@ -36,9 +36,10 @@ const Setting = () => {
           </div>
 
           <div className="flex justify-between">
-            <button className="text-blue-600 font-medium px-4 py-2">
-            Change Password
-          </button>
+            <input 
+            className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300 outline-0 w-1/2"
+            type="password" 
+            name="" id="" />
           <button className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300">
             Update Password
           </button>
