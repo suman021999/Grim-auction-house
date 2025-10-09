@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Gavel, History, MessageSquare, Settings } from "lucide-react";
-import logo from '../../public/logos/logo.png';
+import logo from "../../public/logos/logo.png";
 
 const Sidebar = () => {
   const [active, setActive] = useState("auctions");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const menuItems = [
     { id: "auctions", label: "Auctions", icon: <Gavel size={18} />, path: "/" },
@@ -14,10 +15,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between
-                      md:fixed md:left-0 md:top-0  
-                      fixed bottom-0 w-full h-16 md:h-screen z-999">
-      
+    <aside
+      className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between
+                 md:fixed md:left-0 md:top-0  
+                 fixed bottom-0 w-full h-16 md:h-screen z-50"
+    >
       {/* Desktop Sidebar */}
       <div className="hidden md:flex flex-col justify-between h-full">
         <div>
@@ -34,9 +36,7 @@ const Sidebar = () => {
                 onClick={() => setActive(item.id)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-                    isActive
-                      ? "bg-customGreen2"
-                      : "hover:text-customGreen6"
+                    isActive ? "bg-customGreen2" : "hover:text-customGreen6"
                   }`
                 }
               >
@@ -46,21 +46,33 @@ const Sidebar = () => {
           </nav>
         </div>
 
-        <div className="p-4 border-t-2 border-customGreen6 flex items-center gap-3">
+        {/* User Avatar with Dropdown (Desktop) */}
+        <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
           <img
             src="https://i.pravatar.cc/40"
             alt="User"
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full cursor-pointer"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           />
           <div className="text-sm">
             <p className="font-semibold">John Doe</p>
             <p className="text-xs text-customGreen6">john.doe@example.com</p>
           </div>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-40">
+              <p className="text-gray-700 font-medium">suman_patra</p>
+              <button className="text-red-500 mt-2 hover:underline">
+                Sign out
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Mobile Bottom Nav */}
-      <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16">
+      <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
         {menuItems.map((item) => (
           <NavLink
             key={item.id}
@@ -78,11 +90,28 @@ const Sidebar = () => {
             {item.label}
           </NavLink>
         ))}
+
+        {/* Mobile Avatar with Dropdown */}
+        <div className="relative">
+          <img
+            src="https://i.pravatar.cc/40"
+            alt="User"
+            className="w-10 h-10 rounded-full cursor-pointer"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          />
+
+          {isDropdownOpen && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
+              <p className="text-gray-700 font-medium">suman_patra</p>
+              <button className="text-red-500 mt-2 hover:underline">
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );
 };
 
 export default Sidebar;
-
-

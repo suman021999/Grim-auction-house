@@ -11,7 +11,7 @@ const Auction = () => {
   ];
 
   return (
-    <section className="grid grid-cols-1 m-4 md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0">
+    <section className="grid grid-cols-1 m-4 md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0 justify-center">
 
       {/* Auction Details */}
       <div className="col-span-2  bg-white rounded-2xl shadow p-6">
@@ -37,7 +37,7 @@ const Auction = () => {
           <p className="text-2xl font-bold text-blue-600">$1,250.00</p>
         </div>
 
-        <div className="flex gap-3 mb-6">
+        <div className="flex flex-col lg:flex-row gap-3 mb-6">
           <input
             type="number"
             placeholder="Your bid amount"

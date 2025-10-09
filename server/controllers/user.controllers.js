@@ -1,13 +1,16 @@
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt"
-import {User} from '../models/user.model.js';
+import {User} from '../models/user.models.js';
 
 
 
 
 
-export const registerAccount = asyncHandler(async (req, res) => {})
+export const registerAccount = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
+  
+})
 export const loginAccount  = asyncHandler(async (req, res) => {})
 
 export const logout = asyncHandler(async (req, res) => {

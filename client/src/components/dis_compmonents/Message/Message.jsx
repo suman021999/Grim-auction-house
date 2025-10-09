@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Send, Search, Menu, X } from "lucide-react";
 
@@ -81,25 +82,18 @@ const Message = () => {
   };
 
   return (
-
-<>
-
-
-  <div className="flex flex-col h-screen md:flex-row  bg-gray-50">
-
-      {/* Sidebar (Mobile overlay + Desktop fixed) */}
-    <div
-  className={`fixed lg:static top-0 left-0 h-full w-72
-     sm:w-64 bg-white border-r border-gray-200 
-      flex flex-col z-20 transform transition-transform duration-300
-    ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-  `}
->
-
+    <div className="flex h-screen bg-gray-50 ">
+      {/* Sidebar */}
+      <div
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed md:relative md:translate-x-0 top-0 left-0 h-full w-72 sm:w-64 
+           bg-white border-r border-gray-200 flex flex-col z-20 
+           transform transition-transform duration-300`}
+      >
         {/* Header */}
         <div className="p-4 border-b border-gray-100 flex justify-between items-center">
           <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
-          {/* Close button on mobile */}
           <button
             className="md:hidden text-gray-600"
             onClick={() => setSidebarOpen(false)}
@@ -115,38 +109,30 @@ const Message = () => {
             <input
               type="text"
               placeholder="Search conversations..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto overscroll-contain space-y-3 p-3">
-          {conversations.map((conversation) => (
+        {/* Conversations */}
+        <div className="flex-1 overflow-y-auto space-y-3 p-3">
+          {conversations.map((c) => (
             <div
-              key={conversation.id}
-              className={`p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
-                conversation.active
-                  ? "bg-blue-50 border-l-4 border-l-blue-500"
-                  : ""
+              key={c.id}
+              className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                c.active ? "bg-blue-50 border-l-4 border-l-blue-500" : ""
               }`}
             >
               <div className="flex items-start space-x-3">
                 <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg">
-                  {conversation.avatar}
+                  {c.avatar}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {conversation.name}
-                    </h3>
-                    <span className="text-xs text-gray-500">
-                      {conversation.time}
-                    </span>
+                  <div className="flex justify-between mb-1">
+                    <h3 className="font-medium text-gray-900 truncate">{c.name}</h3>
+                    <span className="text-xs text-gray-500">{c.time}</span>
                   </div>
-                  <p className="text-sm text-gray-600 truncate">
-                    {conversation.preview}
-                  </p>
+                  <p className="text-sm text-gray-600 truncate">{c.preview}</p>
                 </div>
               </div>
             </div>
@@ -154,20 +140,17 @@ const Message = () => {
         </div>
       </div>
 
-      {/* Main Chat Area */}
+      {/* Chat Section */}
       <div className="flex-1 flex flex-col">
-        {/* Chat Header */}
-        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between flex-wrap gap-2">
+        {/* Chat header */}
+        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center"></div>
+            <div className="w-10 h-10 bg-gray-100 rounded-full"></div>
             <div>
-              <h2 className="font-semibold text-gray-900">
-                Vintage Grandfather Clock
-              </h2>
+              <h2 className="font-semibold text-gray-900">Vintage Grandfather Clock</h2>
               <p className="text-sm text-gray-500">Active now</p>
             </div>
           </div>
-          {/* Hamburger for mobile */}
           <button
             className="md:hidden text-gray-600"
             onClick={() => setSidebarOpen(true)}
@@ -177,75 +160,51 @@ const Message = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4">
-          {messages.map((message) => (
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {messages.map((m) => (
             <div
-              key={message.id}
-              className={`flex ${
-                message.sender === "user" ? "justify-end" : "justify-start"
-              }`}
+              key={m.id}
+              className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}
             >
-              <div className="flex items-end space-x-2 max-w-[80%] sm:max-w-md">
-                {message.sender === "seller" && (
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm"></div>
-                )}
-                <div
-                  className={`px-4 py-2 rounded-2xl ${
-                    message.sender === "user"
-                      ? "bg-blue-500 text-white rounded-br-md"
-                      : "bg-gray-100 text-gray-900 rounded-bl-md"
-                  }`}
-                >
-                  <p className="text-sm sm:text-base">{message.text}</p>
-                </div>
+              <div
+                className={`px-4 py-2 rounded-2xl max-w-[80%] sm:max-w-md ${
+                  m.sender === "user"
+                    ? "bg-blue-500 text-white rounded-br-md"
+                    : "bg-gray-100 text-gray-900 rounded-bl-md"
+                }`}
+              >
+                <p>{m.text}</p>
               </div>
-              <span className="text-xs text-gray-400 ml-2 self-end pb-1">
-                {message.time}
-              </span>
+              <span className="text-xs text-gray-400 ml-2 self-end">{m.time}</span>
             </div>
           ))}
         </div>
 
-
-
-
-
-
-        {/* Message Input */}
-        <div className="bg-white border-t border-gray-200 p-4">
+        {/* Input */}
+        <div className="bg-white border-t border-gray-200  p-4 mb-20 sm:mb-18 md:mb-0">
           <div className="flex items-end space-x-2">
-            <div className="flex-1 relative min-w-0">
-              <textarea
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
-                rows="1"
-                style={{ minHeight: "44px", maxHeight: "120px" }}
-              />
-            </div>
+            <textarea
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message..."
+              className="flex-1 px-3 py-2 border border-gray-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="1"
+            />
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim()}
-              className="flex-shrink-0 w-9 h-9 sm:w-11 sm:h-11 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 disabled:bg-gray-300"
             >
               <Send className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
-</div>
-
-</>
-    
+    </div>
   );
 };
 
 export default Message;
-
-
-
-
 
 

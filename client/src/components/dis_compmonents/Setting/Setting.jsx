@@ -8,12 +8,13 @@ const Setting = () => {
   const [dataSharing, setDataSharing] = useState(false);
 
   return (
-<>
-    <div className="space-y-6 m-4">
-      <h1 className="text-2xl font-bold">Settings</h1>
+    <div className="  text-black px-4 sm:px-8 py-6 overflow-x-hidden">
+      
+      
+      <h1 className="text-2xl  font-bold mb-6">Settings</h1>
 
       {/* Account Settings */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Account Settings</h2>
 
         <div className="space-y-4">
@@ -22,7 +23,7 @@ const Setting = () => {
             <input
               type="text"
               defaultValue="john.doe"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
             />
           </div>
 
@@ -31,87 +32,59 @@ const Setting = () => {
             <input
               type="email"
               defaultValue="john.doe@example.com"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
             />
           </div>
 
-          <div className="flex justify-between">
-            <input 
-            className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300 outline-0 w-1/2"
-            type="password" 
-            name="" id="" />
-          <button className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300">
-            Update Password
-          </button>
+          <div className="flex justify-between flex-col sm:flex-row gap-3">
+            <input
+              className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300 outline-0 md:w-1/2"
+              type="password"
+            />
+            <button className="bg-gray-100 hover:bg-gray-200 text-blue-600 font-medium px-4 py-2 rounded-lg border border-gray-300">
+              Update Password
+            </button>
           </div>
-
-          
         </div>
       </div>
 
       {/* Notification Preferences */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Notification Preferences</h2>
 
-        <div className="flex items-center justify-between py-2">
-          <span>Email Notifications</span>
-          <button
-            onClick={() => setEmailNotifications(!emailNotifications)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-              emailNotifications ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                emailNotifications ? "translate-x-6" : "translate-x-1"
+        {[
+          ["Email Notifications", emailNotifications, setEmailNotifications],
+          ["Push Notifications", pushNotifications, setPushNotifications],
+          ["SMS Alerts", smsAlerts, setSmsAlerts],
+        ].map(([label, value, setter]) => (
+          <div key={label} className="flex items-center justify-between py-2">
+            <span>{label}</span>
+            <button
+              onClick={() => setter(!value)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+                value ? "bg-blue-600" : "bg-gray-400"
               }`}
-            />
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between py-2">
-          <span>Push Notifications</span>
-          <button
-            onClick={() => setPushNotifications(!pushNotifications)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-              pushNotifications ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                pushNotifications ? "translate-x-6" : "translate-x-1"
-              }`}
-            />
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between py-2">
-          <span>SMS Alerts</span>
-          <button
-            onClick={() => setSmsAlerts(!smsAlerts)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-              smsAlerts ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                smsAlerts ? "translate-x-6" : "translate-x-1"
-              }`}
-            />
-          </button>
-        </div>
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                  value ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        ))}
       </div>
 
       {/* Privacy */}
-      <div className="bg-white rounded-xl shadow p-6">
+      <div className="bg-white rounded-xl shadow p-6 mb-6">
         <h2 className="text-lg font-semibold mb-4">Privacy</h2>
 
-        <div className="mb-4 flex justify-between">
+        <div className="mb-4 flex justify-between items-center">
           <label className="block text-sm font-medium">Profile Visibility</label>
           <select
             value={profileVisibility}
             onChange={(e) => setProfileVisibility(e.target.value)}
-            className="mt-1 block w-68 border border-gray-300 rounded-md p-2"
+            className="mt-1 w-44 block border border-gray-300 rounded-md p-2 text-black"
           >
             <option>Public</option>
             <option>Private</option>
@@ -123,7 +96,7 @@ const Setting = () => {
           <button
             onClick={() => setDataSharing(!dataSharing)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-              dataSharing ? "bg-blue-600" : "bg-gray-300"
+              dataSharing ? "bg-blue-600" : "bg-gray-400"
             }`}
           >
             <span
@@ -135,18 +108,22 @@ const Setting = () => {
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className="flex justify-end gap-4">
-        <button className="px-4 py-2 border rounded-lg">Cancel</button>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-4 mb-20 sm:mb-15">
+        <button className="px-4 py-2 rounded-lg bg-amber-100 hover:bg-gray-200">
+          Cancel
+        </button>
+        <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
           Save Changes
         </button>
       </div>
     </div>
-</>
   );
 };
 
 export default Setting;
+
+
+
 
 
