@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const menuItems = [
-    { id: "auctions", label: "Auctions", icon: <Gavel size={18} />, path: "/" },
+    // { id: "auctions", label: "Auctions", icon: <Gavel size={18} />, path: "/" },
     { id: "bids", label: "My Bids", icon: <History size={18} />, path: "/my_bid" },
     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
     { id: "settings", label: "Settings", icon: <Settings size={18} />, path: "/settings" },

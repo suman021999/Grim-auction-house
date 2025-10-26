@@ -14,7 +14,7 @@ const Dashboard = () => {
       {/* Main content */}
       <main className="flex-1 md:ml-64 ">
         <Routes>
-          <Route path="/" element={<Auction />} />
+          <Route path="/auction" element={<Auction />} />
           <Route path="/my_bid" element={<Bid />} />
           <Route path="/message" element={<Message />} />
           <Route path="/settings" element={<Setting />} />

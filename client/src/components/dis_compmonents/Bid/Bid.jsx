@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Auction from "../Auction/Auction";
 
 const bids = [
   {
@@ -37,7 +39,7 @@ const bids = [
     status: "ended",
     timeLeft: "Ended: 2 days ago",
   },
-    {
+  {
     id: 4,
     title: "Vintage Leather Briefcase",
     img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
@@ -49,6 +51,7 @@ const bids = [
 ];
 
 const Bid = () => {
+  const navigate = useNavigate(<Auction />);
   return (
     <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
       <h2 className="text-xl font-bold mb-4">My Bids</h2>
@@ -56,10 +59,14 @@ const Bid = () => {
       <div className="grid md:grid-cols-2 gap-6">
         {bids.map((bid) => (
           <div
-          key={bid.id}
-          className="bg-white rounded-xl shadow-md overflow-hidden border"
+            key={bid.id}
+            className="bg-white rounded-xl shadow-md overflow-hidden border"
           >
-            <img src={bid.img} alt={bid.title} className="w-full h-48 object-cover" />
+            <img
+              src={bid.img}
+              alt={bid.title}
+              className="w-full h-48 object-cover"
+            />
             <div className="p-4 space-y-2">
               <h3 className="text-lg font-semibold">{bid.title}</h3>
 
@@ -91,7 +98,9 @@ const Bid = () => {
               )}
 
               <p className="text-xs text-gray-500">
-                {bid.status === "ended" ? bid.timeLeft : `Time Left: ${bid.timeLeft}`}
+                {bid.status === "ended"
+                  ? bid.timeLeft
+                  : `Time Left: ${bid.timeLeft}`}
               </p>
 
               {/* Buttons */}
@@ -101,7 +110,10 @@ const Bid = () => {
                     Increase Bid
                   </button>
                 )}
-                <button className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50">
+                <button
+                  onClick={() => navigate(`/auction`)} // or `/auction?id=${bid.id}`
+                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+                >
                   View Item
                 </button>
               </div>
@@ -114,4 +126,3 @@ const Bid = () => {
 };
 
 export default Bid;
-
