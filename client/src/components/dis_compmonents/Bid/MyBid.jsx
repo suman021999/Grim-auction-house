@@ -50,7 +50,7 @@ const bids = [
   },
 ];
 
-const Bid = () => {
+const MyBid = () => {
   const navigate = useNavigate(<Auction />);
   return (
     <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
@@ -125,4 +125,4 @@ const Bid = () => {
   );
 };
 
-export default Bid;
+export default MyBid;

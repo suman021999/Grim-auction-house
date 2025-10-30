@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Gavel, History, MessageSquare, Settings } from "lucide-react";
+import { CircleUserRound,  History, MessageSquare, Settings } from "lucide-react";
 import logo from "../../public/logos/logo.png";
 
 const Sidebar = () => {
@@ -8,8 +8,9 @@ const Sidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const menuItems = [
-    // { id: "auctions", label: "Auctions", icon: <Gavel size={18} />, path: "/" },
+    { id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" },
     { id: "bids", label: "My Bids", icon: <History size={18} />, path: "/my_bid" },
+    { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
     { id: "settings", label: "Settings", icon: <Settings size={18} />, path: "/settings" },
   ];
