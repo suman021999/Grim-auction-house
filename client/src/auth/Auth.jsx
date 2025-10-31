@@ -35,7 +35,7 @@ useEffect(() => {
 
 
       {/* ================= CARD ================= */}
-      <div className="relative h-[500px] bg-amber-50 shadow-2xl rounded-2xl overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
+      <div className="relative  bg-amber-50 shadow-2xl  overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
         
         {/* LEFT PANEL */}
               <div className="md:w-1/2 flex flex-col justify-center items-center text-center p-8">
@@ -62,12 +62,12 @@ useEffect(() => {
             Lorem Ipsum is simply dummy text of the printing and typesetting industry.
           </p>
 
-          <div className="flex gap-3 justify-center">
+          {/* <div className="flex gap-3 justify-center">
             <button className="bg-blue-600 text-white p-3 rounded-md"><FaFacebookF /></button>
             <button className="bg-sky-400 text-white p-3 rounded-md"><FaTwitter /></button>
             <button className="bg-red-600 text-white p-3 rounded-md"><FaGoogle /></button>
             <button className="bg-blue-700 text-white p-3 rounded-md"><FaLinkedinIn /></button>
-          </div>
+          </div> */}
         </div>
 
         {/* RIGHT PANEL */}
