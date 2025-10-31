@@ -1,5 +1,5 @@
 import React from 'react'
-// import Auth from '../auth/Auth'
+import Auth from '../auth/Auth'
 import Dashboard from './Dashboard'
 // import Display from './Display'
 
@@ -7,9 +7,9 @@ import Dashboard from './Dashboard'
 const MainPage = () => {
   return (
     <>
-    {/* <Auth/> */}
+    <Auth/>
       {/* <Display/> */}
-      <Dashboard/>
+      {/* <Dashboard/> */}
     </>
   )
 }

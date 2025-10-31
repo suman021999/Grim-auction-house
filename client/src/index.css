@@ -104,6 +104,7 @@
 
 
 
-/* .scroll-animation:hover {
-  animation-play-state: paused;
-} */
+.clip-left {
+  clip-path: inset(0 2% 0 0);
+}
+
