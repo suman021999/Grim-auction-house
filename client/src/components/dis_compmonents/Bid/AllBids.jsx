@@ -1,6 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Auction from "../Auction/Auction";
+import { Link } from "react-router-dom";
 
 const bids = [
   {
@@ -38,20 +37,10 @@ const bids = [
     currentBid: 180,
     status: "ended",
     timeLeft: "Ended: 2 days ago",
-  },
-  {
-    id: 4,
-    title: "Vintage Leather Briefcase",
-    img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
-    yourBid: 180,
-    currentBid: 180,
-    status: "ended",
-    timeLeft: "Ended: 2 days ago",
-  },
+  }
 ];
 
 const AllBids = () => {
-  const navigate = useNavigate(<Auction />);
   return (
     <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
       <h2 className="text-xl font-bold mb-4">All Bids</h2>
@@ -67,6 +56,7 @@ const AllBids = () => {
               alt={bid.title}
               className="w-full h-48 object-cover"
             />
+
             <div className="p-4 space-y-2">
               <h3 className="text-lg font-semibold">{bid.title}</h3>
 
@@ -80,7 +70,6 @@ const AllBids = () => {
                 <span>${bid.currentBid.toFixed(2)}</span>
               </div>
 
-              {/* Status Badge */}
               {bid.status === "winning" && (
                 <span className="inline-block px-3 py-1 bg-green-500 text-white rounded-lg text-xs">
                   WINNING
@@ -98,24 +87,22 @@ const AllBids = () => {
               )}
 
               <p className="text-xs text-gray-500">
-                {bid.status === "ended"
-                  ? bid.timeLeft
-                  : `Time Left: ${bid.timeLeft}`}
+                {bid.status === "ended" ? bid.timeLeft : `Time Left: ${bid.timeLeft}`}
               </p>
 
-              {/* Buttons */}
               <div className="flex gap-2 mt-2">
                 {bid.status === "outbid" && (
                   <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
                     Increase Bid
                   </button>
                 )}
-                <button
-                  onClick={() => navigate(`/auction`)} // or `/auction?id=${bid.id}`
-                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+
+                <Link
+                  to={`/auction`} ///${bid.id}
+                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50 text-center block"
                 >
                   View Item
-                </button>
+                </Link>
               </div>
             </div>
           </div>

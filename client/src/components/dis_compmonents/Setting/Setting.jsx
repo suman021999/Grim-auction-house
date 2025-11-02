@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 
 const Setting = () => {
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [pushNotifications, setPushNotifications] = useState(false);
-  const [smsAlerts, setSmsAlerts] = useState(true);
   const [profileVisibility, setProfileVisibility] = useState("Public");
   const [dataSharing, setDataSharing] = useState(false);
 
@@ -11,7 +8,7 @@ const Setting = () => {
     <div className="  text-black px-4 sm:px-8 py-6 overflow-x-hidden">
       
       
-      <h1 className="text-2xl  font-bold mb-6">Settings</h1>
+      <h1 className="text-2xl  font-bold mb-6">My Settings</h1>
 
       {/* Account Settings */}
       <div className="bg-white rounded-xl shadow p-6 mb-6">
@@ -48,32 +45,7 @@ const Setting = () => {
         </div>
       </div>
 
-      {/* Notification Preferences */}
-      <div className="bg-white rounded-xl shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">Notification Preferences</h2>
-
-        {[
-          ["Email Notifications", emailNotifications, setEmailNotifications],
-          ["Push Notifications", pushNotifications, setPushNotifications],
-          ["SMS Alerts", smsAlerts, setSmsAlerts],
-        ].map(([label, value, setter]) => (
-          <div key={label} className="flex items-center justify-between py-2">
-            <span>{label}</span>
-            <button
-              onClick={() => setter(!value)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
-                value ? "bg-blue-600" : "bg-gray-400"
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
-                  value ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </div>
-        ))}
-      </div>
+   
 
       {/* Privacy */}
       <div className="bg-white rounded-xl shadow p-6 mb-6">
@@ -109,7 +81,7 @@ const Setting = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-4 mb-20 sm:mb-15">
+      <div className="flex justify-end gap-4 ">
         <button className="px-4 py-2 rounded-lg bg-amber-100 hover:bg-gray-200">
           Cancel
         </button>

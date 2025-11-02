@@ -13,6 +13,8 @@ export const registerAccount = asyncHandler(async (req, res) => {
 })
 export const loginAccount  = asyncHandler(async (req, res) => {})
 
+export const admin  = asyncHandler(async (req, res) => {})
+
 export const logout = asyncHandler(async (req, res) => {
   res.cookie('jwt', '', {
     httpOnly: true,

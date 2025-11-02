@@ -1,6 +1,6 @@
+import { ChevronLeft } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Auction from "../Auction/Auction";
+import { Link } from "react-router-dom";
 
 const bids = [
   {
@@ -38,23 +38,18 @@ const bids = [
     currentBid: 180,
     status: "ended",
     timeLeft: "Ended: 2 days ago",
-  },
-  {
-    id: 4,
-    title: "Vintage Leather Briefcase",
-    img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
-    yourBid: 180,
-    currentBid: 180,
-    status: "ended",
-    timeLeft: "Ended: 2 days ago",
-  },
+  }
 ];
 
 const MyBid = () => {
-  const navigate = useNavigate(<Auction />);
   return (
     <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
-      <h2 className="text-xl font-bold mb-4">My Bids</h2>
+      <div className="flex items-center mb-4 gap-4">
+        <Link to="/user" className="bg-white rounded-xl shadow hover:bg-gray-100 transition p-2"><ChevronLeft /></Link>
+        
+       <h2 className="text-xl font-bold ">My Bids</h2>
+      </div>
+      
 
       <div className="grid md:grid-cols-2 gap-6">
         {bids.map((bid) => (
@@ -67,6 +62,7 @@ const MyBid = () => {
               alt={bid.title}
               className="w-full h-48 object-cover"
             />
+
             <div className="p-4 space-y-2">
               <h3 className="text-lg font-semibold">{bid.title}</h3>
 
@@ -82,19 +78,13 @@ const MyBid = () => {
 
               {/* Status Badge */}
               {bid.status === "winning" && (
-                <span className="inline-block px-3 py-1 bg-green-500 text-white rounded-lg text-xs">
-                  WINNING
-                </span>
+                <span className="inline-block px-3 py-1 bg-green-500 text-white rounded-lg text-xs">WINNING</span>
               )}
               {bid.status === "outbid" && (
-                <span className="inline-block px-3 py-1 bg-red-500 text-white rounded-lg text-xs">
-                  OUTBID
-                </span>
+                <span className="inline-block px-3 py-1 bg-red-500 text-white rounded-lg text-xs">OUTBID</span>
               )}
               {bid.status === "ended" && (
-                <span className="inline-block px-3 py-1 bg-gray-500 text-white rounded-lg text-xs">
-                  ENDED
-                </span>
+                <span className="inline-block px-3 py-1 bg-gray-500 text-white rounded-lg text-xs">ENDED</span>
               )}
 
               <p className="text-xs text-gray-500">
@@ -110,12 +100,13 @@ const MyBid = () => {
                     Increase Bid
                   </button>
                 )}
-                <button
-                  onClick={() => navigate(`/auction`)} // or `/auction?id=${bid.id}`
-                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50"
+
+                <Link
+                  to={`/auction`} ///${bid.id}
+                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50 text-center block"
                 >
                   View Item
-                </button>
+                </Link>
               </div>
             </div>
           </div>
