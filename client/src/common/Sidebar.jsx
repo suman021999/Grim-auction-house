@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { CircleUserRound,  History, MessageSquare, Plus} from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { CircleUserRound, History, MessageSquare, Plus } from "lucide-react";
 import logo from "../../public/logos/logo.png";
 import { HiOutlineUserGroup } from "react-icons/hi2";
+
 const Sidebar = () => {
   const [active, setActive] = useState("auctions");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const menuItems = [
-    { id: "admin", label: "Admin", icon: <CircleUserRound size={18} /> , path: "/admin" },
-    { id: "user", label: "My Profile", icon: <HiOutlineUserGroup  size={18} /> , path: "/user" },
-    // { id: "bids", label: "My Bids", icon: <History size={18} />, path: "/my_bid" },
-    // { id: "settings", label: "Settings", icon: <Settings size={18} />, path: "/settings" },
+    { id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" },
+    { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
     { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
-    
   ];
 
   return (
@@ -44,16 +42,23 @@ const Sidebar = () => {
                 {item.icon} {item.label}
               </NavLink>
             ))}
-            <Link to='/create' className="flex bg-customGreen2 hover:text-customGreen6 w-44 m-4 py-2 px-4 rounded-lg justify-between mt-6">
-            <button type="button">Create</button>
-            <Plus />
-          </Link>
-          </nav>
 
-          
+            {/* ✅ Desktop Create button with active state */}
+            <NavLink
+              to="/create"
+              className={({ isActive }) =>
+                `flex w-44 m-4 py-2 px-4 rounded-lg justify-between mt-6 ${
+                  isActive ? "bg-customGreen2" : "hover:text-customGreen6 bg-customGreen3"
+                }`
+              }
+            >
+              <button type="button">Create</button>
+              <Plus />
+            </NavLink>
+          </nav>
         </div>
 
-        {/* User Avatar with Dropdown (Desktop) */}
+        {/* User Avatar */}
         <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
           <img
             src="https://i.pravatar.cc/40"
@@ -66,69 +71,68 @@ const Sidebar = () => {
             <p className="text-xs text-customGreen6">john.doe@example.com</p>
           </div>
 
-          {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div className="absolute bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-40">
               <p className="text-gray-700 font-medium">suman_patra</p>
-              <button className="text-red-500 mt-2 hover:underline">
-                Sign out
-              </button>
+              <button className="text-red-500 mt-2 hover:underline">Sign out</button>
             </div>
           )}
         </div>
       </div>
 
-    {/* Mobile Bottom Nav */}
-       <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
-       
-         {menuItems.map((item) => (
-           <NavLink
-             key={item.id}
-             to={item.path}
-             onClick={() => setActive(item.id)}
-             className={({ isActive }) =>
-               `flex cursor-pointer flex-col items-center justify-center text-xs ${
-                 isActive
-                   ? "text-customGreen6"
-                   : "text-customGreen7 hover:text-customGreen6"
-               }`
-             }
-           >
-             {item.icon}
-             {item.label}
-           </NavLink>
-         ))}
-       
-         {/* ✅ Create Button in Mobile Sidebar */}
-         <Link 
-           to="/create" 
-           className="flex flex-col items-center justify-center text-xs text-customGreen7 hover:text-customGreen6"
-         >
-           <Plus size={18} />
-           Create
-         </Link>
-       
-         {/* Mobile Avatar */}
-         <div className="relative flex flex-col items-center justify-center text-xs">
-           <img
-             src="https://i.pravatar.cc/40"
-             alt="User"
-             className="w-8 h-8 rounded-full cursor-pointer"
-             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-           />
-           Profile
-       
-           {isDropdownOpen && (
-             <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
-               <p className="text-gray-700 font-medium">suman_patra</p>
-               <button className="text-red-500 mt-2 hover:underline">
-                 Sign out
-               </button>
-             </div>
-           )}
-         </div>
-       </div>
+      {/* Mobile Bottom Nav */}
+      <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.id}
+            to={item.path}
+            onClick={() => setActive(item.id)}
+            className={({ isActive }) =>
+              `flex cursor-pointer flex-col items-center justify-center text-xs ${
+                isActive
+                  ? "text-customGreen6"
+                  : "text-customGreen7 hover:text-customGreen6"
+              }`
+            }
+          >
+            {item.icon}
+            {item.label}
+          </NavLink>
+        ))}
 
+        {/* ✅ Mobile Create button with active highlight */}
+        <NavLink
+          to="/create"
+          className={({ isActive }) =>
+            `flex flex-col items-center justify-center text-xs ${
+              isActive
+                ? "text-customGreen6"
+                : "text-customGreen7 hover:text-customGreen6"
+            }`
+          }
+        >
+          <Plus size={18} />
+          Create
+        </NavLink>
+
+        {/* Mobile Avatar */}
+        <div className="relative flex flex-col items-center justify-center text-xs">
+          <img
+            src="https://i.pravatar.cc/40"
+            alt="User"
+            className="w-8 h-8 rounded-full cursor-pointer"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          />
+          Profile
+
+          {isDropdownOpen && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
+              <p className="text-gray-700 font-medium">suman_patra</p>
+              <button className="text-red-500 mt-2 hover:underline">Sign out</button>
+            </div>
+          )}
+        </div>
+      </div>
     </aside>
   );
 };

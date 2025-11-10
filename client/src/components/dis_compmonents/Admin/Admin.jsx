@@ -1,6 +1,6 @@
 // Admin.jsx
+import { Bell } from "lucide-react";
 import React, { useEffect, useState } from "react";
-
 const mockData = {
   history: [
     {
@@ -116,7 +116,7 @@ export default function Admin() {
         <main className="flex-1 p-4 md:p-8">
           {/* Header (tabs + optional notices) */}
           <div className="mb-6 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex justify-between items-center w-full gap-3">
               <div className="bg-white  rounded-full p-1 shadow">
                 <div className="flex">
                   <button
@@ -133,7 +133,9 @@ export default function Admin() {
                   </button>
                 </div>
               </div>
-              
+              <div className="hover:bg-gray-300 flex justify-center items-center w-10 h-10 rounded-full">
+                <Bell size={18} className="text-black " />
+              </div>
             </div>
 
             {/* Summary on top for small screens (desktop shows it on the right) */}

@@ -2,6 +2,12 @@ import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
     username: {
       type: String,
       required: true,
@@ -40,6 +46,11 @@ const userSchema = new Schema(
     },
     refreshToken: {
       type: String,
+    },
+
+    admin:{
+      type: Boolean,
+      default: false
     },
   },
   {
