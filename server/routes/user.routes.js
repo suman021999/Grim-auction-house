@@ -1,5 +1,6 @@
 import {Router} from 'express';
-import {googleLogin,  loginAccount, registerAccount } from '../controllers/user.controller.js';
+import {admin, googleLogin,  loginAccount, logout, registerAccount } from '../controllers/user.controller.js';
+import { protect } from '../middleware/auth.middleware.js';
 
 // admin, googleLogin, loginAccount, logout,
 
@@ -15,9 +16,11 @@ router.route("/register").post( registerAccount);
 router.route("/login").post( loginAccount );
 
 // Admin route
-// router.route("/admin").post( admin );
+
+router.route("/admin").get(protect, admin);
 
 // Logout route
-// router.route("/admin").post( logout );
+router.route("/logout").post(protect, logout);
+
 
 export default router;

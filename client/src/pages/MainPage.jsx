@@ -16,10 +16,10 @@ const MainPage = () => {
         <Route path="/login" element={<Auth />} />
 
         {/* Protected dashboard pages */}
-        <Route path="*" element={<Dashboard />} />
+        <Route path="/*" element={<Dashboard />} />
 
-        {/* Redirect unknown routes to home */}
-        <Route path="*" element={<Navigate to="/*" replace />} />
+        Redirect unknown routes to home
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

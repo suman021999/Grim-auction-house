@@ -1,25 +1,341 @@
+// import React, { useState } from "react";
+// import { NavLink } from "react-router-dom";
+// import { CircleUserRound, History, MessageSquare, Plus } from "lucide-react";
+// import logo from "/logos/logo.png";
+// import { HiOutlineUserGroup } from "react-icons/hi2";
+
+// const Sidebar = () => {
+//   const [active, setActive] = useState("admin || user");
+//   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+//   const menuItems = [
+//     { id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" },
+//     { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
+//     { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
+//     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
+//   ];
+
+//   return (
+//     <aside
+//       className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between md:fixed md:left-0 md:top-0 fixed bottom-0 w-full h-16 md:h-screen z-50"
+//     >
+//       {/* Desktop Sidebar */}
+//       <div className="hidden md:flex flex-col justify-between h-full">
+//         <div>
+//           <div className="p-6 flex items-center justify-start">
+//             <img className="w-16 h-16" src={logo} alt="Logo" />
+//             <h1 className="text-2xl font-[font3]">Grim</h1>
+//           </div>
+
+//           <nav className="flex flex-col gap-2 px-4">
+//             {menuItems.map((item) => (
+//               <NavLink
+//                 key={item.id}
+//                 to={item.path}
+//                 onClick={() => setActive(item.id)}
+//                 className={({ isActive }) =>
+//                   `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+//                     isActive ? "bg-customGreen2" : "hover:text-customGreen6"
+//                   }`
+//                 }
+//               >
+//                 {item.icon} {item.label}
+//               </NavLink>
+//             ))}
+
+//             {/* ✅ Desktop Create button with active state */}
+//             <NavLink
+//               to="/create"
+//               className={({ isActive }) =>
+//                 `flex w-44 m-4 py-2 px-4 rounded-lg justify-between mt-6 ${
+//                   isActive ? "bg-customGreen2" : "hover:text-customGreen6 bg-customGreen3"
+//                 }`
+//               }
+//             >
+//               <button type="button">Create</button>
+//               <Plus />
+//             </NavLink>
+//           </nav>
+//         </div>
+
+//         {/* User Avatar */}
+//         <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
+//           <img
+//             src="https://i.pravatar.cc/40"
+//             alt="User"
+//             className="w-10 h-10 rounded-full cursor-pointer"
+//             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+//           />
+//           <div className="text-sm">
+//             <p className="font-semibold">John Doe</p>
+//             <p className="text-xs text-customGreen6">john.doe@example.com</p>
+//           </div>
+
+//           {isDropdownOpen && (
+//             <div className="absolute bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-40">
+//               <p className="text-gray-700 font-medium">suman_patra</p>
+//               <button className="text-red-500 mt-2 hover:underline">Sign out</button>
+//             </div>
+//           )}
+//         </div>
+        
+//       </div>
+
+//       {/* Mobile Bottom Nav */}
+//       <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
+//         {menuItems.map((item) => (
+//           <NavLink
+//             key={item.id}
+//             to={item.path}
+//             onClick={() => setActive(item.id)}
+//             className={({ isActive }) =>
+//               `flex cursor-pointer flex-col items-center justify-center text-xs ${
+//                 isActive
+//                   ? "text-customGreen6"
+//                   : "text-customGreen7 hover:text-customGreen6"
+//               }`
+//             }
+//           >
+//             {item.icon}
+//             {item.label}
+//           </NavLink>
+//         ))}
+
+//         {/* ✅ Mobile Create button with active highlight */}
+//         <NavLink
+//           to="/create"
+//           className={({ isActive }) =>
+//             `flex flex-col items-center justify-center text-xs ${
+//               isActive
+//                 ? "text-customGreen6"
+//                 : "text-customGreen7 hover:text-customGreen6"
+//             }`
+//           }
+//         >
+//           <Plus size={18} />
+//           Create
+//         </NavLink>
+
+//         {/* Mobile Avatar */}
+//         <div className="relative flex flex-col items-center justify-center text-xs">
+//           <img
+//             src="https://i.pravatar.cc/40"
+//             alt="User"
+//             className="w-8 h-8 rounded-full cursor-pointer"
+//             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+//           />
+//           Profile
+
+//           {isDropdownOpen && (
+//             <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
+//               <p className="text-gray-700 font-medium">suman_patra</p>
+//               <button className="text-red-500 mt-2 hover:underline">Sign out</button>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </aside>
+//   );
+// };
+
+// export default Sidebar;
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import { NavLink, useNavigate } from "react-router-dom";
+// import { CircleUserRound, History, MessageSquare, Plus } from "lucide-react";
+// import logo from "/logos/logo.png";
+// import { HiOutlineUserGroup } from "react-icons/hi2";
+
+// import { useSelector, useDispatch } from "react-redux";
+// import { logoutUser } from "../hooks/authSlice";
+// import axios from "axios";
+
+// const Sidebar = () => {
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+
+//   const { user, isAdmin } = useSelector((state) => state.auth);
+
+//   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+//   const menuItems = [
+//     ...(isAdmin
+//       ? [{ id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" }]
+//       : []),
+
+//     { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
+//     { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
+//     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
+//   ];
+
+//   const handleLogout = async () => {
+//     try {
+//       await axios.post(`${import.meta.env.VITE_AUTH_URL}/logout`, {}, { withCredentials: true });
+//     } catch (e) {}
+
+//     dispatch(logoutUser());
+//     navigate("/");
+//   };
+
+//   return (
+//     <aside className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between md:fixed md:left-0 md:top-0 fixed bottom-0 w-full h-16 md:h-screen z-50">
+
+//       {/* Desktop */}
+//       <div className="hidden md:flex flex-col justify-between h-full">
+//         <div>
+//           <div className="p-6 flex items-center justify-start">
+//             <img className="w-16 h-16" src={logo} alt="Logo" />
+//             <h1 className="text-2xl font-[font3]">Grim</h1>
+//           </div>
+
+//           <nav className="flex flex-col gap-2 px-4">
+//             {menuItems.map(item => (
+//               <NavLink
+//                 key={item.id}
+//                 to={item.path}
+//                 className={({ isActive }) =>
+//                   `flex items-center gap-3 px-4 py-2 rounded-lg transition ${isActive ? "bg-customGreen2" : "hover:text-customGreen6"}`
+//                 }
+//               >
+//                 {item.icon} {item.label}
+//               </NavLink>
+//             ))}
+
+//             <NavLink
+//               to="/create"
+//               className={({ isActive }) =>
+//                 `flex w-44 m-4 py-2 px-4 rounded-lg justify-between mt-6 ${
+//                   isActive ? "bg-customGreen2" : "hover:text-customGreen6 bg-customGreen3"
+//                 }`
+//               }
+//             >
+//               <button type="button">Create</button>
+//               <Plus />
+//             </NavLink>
+//           </nav>
+//         </div>
+
+//         {/* USER CARD */}
+//         <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
+//           <img
+//             src={user?.avatar ? user.avatar : "https://i.pravatar.cc/40"}
+//             alt="User"
+//             className="w-10 h-10 rounded-full cursor-pointer"
+//             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+//           />
+
+//           <div className="text-sm">
+//             <p className="font-semibold">{user?.fullname}</p>
+//             <p className="text-xs text-customGreen6">{user?.email}</p>
+//           </div>
+
+//           {isDropdownOpen && (
+//             <div className="absolute bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-40">
+//               <p className="text-gray-700 font-medium">{user?.username}</p>
+//               <button
+//                 onClick={handleLogout}
+//                 className="text-red-500 mt-2 hover:underline"
+//               >
+//                 Sign out
+//               </button>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+
+//       {/* MOBILE NAV SAME UI — JUST REUSE menuItems */}
+//     </aside>
+//   );
+// };
+
+// export default Sidebar;
+
+
+
+
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CircleUserRound, History, MessageSquare, Plus } from "lucide-react";
-import logo from "../../public/logos/logo.png";
+import logo from "/logos/logo.png";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../hooks/authSlice";
+import axios from "axios";
+
 const Sidebar = () => {
-  const [active, setActive] = useState("auctions");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isAdmin } = useSelector((state) => state.auth);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // -------------------------
+  //  AVATAR FIX FUNCTION
+  // -------------------------
+  const renderAvatar = (size = "w-10 h-10") => {
+    if (!user?.avatar) {
+      return (
+        <div
+          className={`${size} rounded-full bg-gray-400 flex items-center justify-center text-white font-bold cursor-pointer`}
+        >
+          ?
+        </div>
+      );
+    }
+
+    const isURL = user.avatar.startsWith("http");
+
+    if (isURL) {
+      return (
+        <img
+          src={user.avatar}
+          alt="avatar"
+          className={`${size} rounded-full object-cover border cursor-pointer`}
+        />
+      );
+    }
+
+    // INITIALS
+    return (
+      <div
+        className={`${size} rounded-full bg-gray-700 flex items-center justify-center text-white font-bold cursor-pointer`}
+      >
+        {user.avatar.slice(0, 2).toUpperCase()}
+      </div>
+    );
+  };
+
   const menuItems = [
-    { id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" },
+    ...(isAdmin
+      ? [{ id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" }]
+      : []),
+
     { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
     { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
   ];
 
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_AUTH_URL}/logout`, {}, { withCredentials: true });
+    } catch (e) {}
+
+    dispatch(logoutUser());
+    navigate("/");
+  };
+
   return (
-    <aside
-      className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between md:fixed md:left-0 md:top-0 fixed bottom-0 w-full h-16 md:h-screen z-50"
-    >
-      {/* Desktop Sidebar */}
+    <aside className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between md:fixed md:left-0 md:top-0 fixed bottom-0 w-full h-16 md:h-screen z-50">
+
+      {/* Desktop */}
       <div className="hidden md:flex flex-col justify-between h-full">
         <div>
           <div className="p-6 flex items-center justify-start">
@@ -28,22 +344,18 @@ const Sidebar = () => {
           </div>
 
           <nav className="flex flex-col gap-2 px-4">
-            {menuItems.map((item) => (
+            {menuItems.map(item => (
               <NavLink
                 key={item.id}
                 to={item.path}
-                onClick={() => setActive(item.id)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-                    isActive ? "bg-customGreen2" : "hover:text-customGreen6"
-                  }`
+                  `flex items-center gap-3 px-4 py-2 rounded-lg transition ${isActive ? "bg-customGreen2" : "hover:text-customGreen6"}`
                 }
               >
                 {item.icon} {item.label}
               </NavLink>
             ))}
 
-            {/* ✅ Desktop Create button with active state */}
             <NavLink
               to="/create"
               className={({ isActive }) =>
@@ -58,35 +370,41 @@ const Sidebar = () => {
           </nav>
         </div>
 
-        {/* User Avatar */}
+        {/* USER CARD */}
         <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="User"
-            className="w-10 h-10 rounded-full cursor-pointer"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          />
+          
+          <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            {renderAvatar("w-10 h-10")}
+          </div>
+
           <div className="text-sm">
-            <p className="font-semibold">John Doe</p>
-            <p className="text-xs text-customGreen6">john.doe@example.com</p>
+            <p className="font-semibold">{user?.fullname}</p>
+            <p className="text-xs text-customGreen6">{user?.email}</p>
           </div>
 
           {isDropdownOpen && (
             <div className="absolute bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-40">
-              <p className="text-gray-700 font-medium">suman_patra</p>
-              <button className="text-red-500 mt-2 hover:underline">Sign out</button>
+              <p className="text-gray-700 font-medium">{user?.fullname}</p>
+              <button
+                onClick={handleLogout}
+                className="text-red-500 mt-2 hover:underline"
+              >
+                Sign out
+              </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* Mobile Bottom Nav */}
+      {/* ------------------------------------------------ */}
+      {/*              MOBILE BOTTOM NAV                  */}
+      {/* ------------------------------------------------ */}
       <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
+
         {menuItems.map((item) => (
           <NavLink
             key={item.id}
             to={item.path}
-            onClick={() => setActive(item.id)}
             className={({ isActive }) =>
               `flex cursor-pointer flex-col items-center justify-center text-xs ${
                 isActive
@@ -100,7 +418,6 @@ const Sidebar = () => {
           </NavLink>
         ))}
 
-        {/* ✅ Mobile Create button with active highlight */}
         <NavLink
           to="/create"
           className={({ isActive }) =>
@@ -115,24 +432,27 @@ const Sidebar = () => {
           Create
         </NavLink>
 
-        {/* Mobile Avatar */}
+        {/* MOBILE AVATAR + DROPDOWN */}
         <div className="relative flex flex-col items-center justify-center text-xs">
-          <img
-            src="https://i.pravatar.cc/40"
-            alt="User"
-            className="w-8 h-8 rounded-full cursor-pointer"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          />
+          <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+            {renderAvatar("w-8 h-8")}
+          </div>
           Profile
 
           {isDropdownOpen && (
             <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
-              <p className="text-gray-700 font-medium">suman_patra</p>
-              <button className="text-red-500 mt-2 hover:underline">Sign out</button>
+              <p className="text-gray-700 font-medium">{user?.fullname}</p>
+              <button
+                onClick={handleLogout}
+                className="text-red-500 mt-2 hover:underline"
+              >
+                Sign out
+              </button>
             </div>
           )}
         </div>
       </div>
+
     </aside>
   );
 };

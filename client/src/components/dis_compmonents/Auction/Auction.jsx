@@ -1,3 +1,4 @@
+//Auction
 import React from "react";
 import Chat from "../chat/Chat";
 import Art from "../../../../public/scroll_images/Arts.png";
@@ -12,7 +13,6 @@ const Auction = () => {
 
   return (
     <section className="grid grid-cols-1 m-4 md:grid-cols-3 gap-6 py-20 sm:py-16 md:py-0 lg:py-0 justify-center">
-
       {/* Auction Details */}
       <div className="col-span-2  bg-white rounded-2xl shadow p-6">
         <div className="flex justify-between">
@@ -48,25 +48,24 @@ const Auction = () => {
           </button>
         </div>
 
-  {/* Bid History */}
-<div >
-  <h3 className="font-semibold mb-2">Bid History</h3>
-  <ul className="space-y-3 text-sm overflow-y-auto no-scrollbar max-h-24">
-    {bids.map((bid) => (
-      <li
-        key={bid.id}
-        className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1"
-      >
-        <span className="font-medium">{bid.amount}</span>
-        <span className="text-blue-600 hover:underline">by {bid.user}</span>
-        <span className="text-gray-400">{bid.time}</span>
-      </li>
-    ))}
-  </ul>
-</div>
-
-
-
+        {/* Bid History */}
+        <div>
+          <h3 className="font-semibold mb-2">Bid History</h3>
+          <ul className="space-y-3 text-sm overflow-y-auto no-scrollbar max-h-24">
+            {bids.map((bid) => (
+              <li
+                key={bid.id}
+                className="flex justify-between items-center pb-1 border-b-2 border-b-customGreen1"
+              >
+                <span className="font-medium">{bid.amount}</span>
+                <span className="text-blue-600 hover:underline">
+                  by {bid.user}
+                </span>
+                <span className="text-gray-400">{bid.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* Chat Section */}
@@ -78,4 +77,3 @@ const Auction = () => {
 };
 
 export default Auction;
-

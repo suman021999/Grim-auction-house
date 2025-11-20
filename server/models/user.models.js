@@ -48,9 +48,10 @@ const userSchema = new Schema(
       type: String,
     },
 
-    admin:{
-      type: Boolean,
-      default: false
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
     },
   },
   {
@@ -61,9 +62,9 @@ const userSchema = new Schema(
 );
 // Pre-save hook to generate avatar from name
 userSchema.pre("save", function (next) {
-  if (!this.avatar && this.username) {
+  if (!this.avatar && this.fullname) {
     // Get first two letters and convert to uppercase
-    const initials = this.username.slice(0, 2).toUpperCase();
+    const initials = this.fullname.slice(0, 1).toUpperCase();
     this.avatar = initials;
   }
   next();
