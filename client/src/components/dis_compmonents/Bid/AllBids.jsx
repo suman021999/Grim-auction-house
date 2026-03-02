@@ -1,113 +1,76 @@
-//AllBids.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
-const bids = [
-  {
-    id: 1,
-    title: "Vintage Grandfather Clock",
-    img: "https://via.placeholder.com/300x200?text=Grandfather+Clock",
-    yourBid: 1250,
-    currentBid: 1250,
-    status: "winning",
-    timeLeft: "01h 25m 10s",
-  },
-  {
-    id: 2,
-    title: "Antique Silver Teapot",
-    img: "https://via.placeholder.com/300x200?text=Silver+Teapot",
-    yourBid: 320,
-    currentBid: 350,
-    status: "outbid",
-    timeLeft: "00h 45m 30s",
-  },
-  {
-    id: 3,
-    title: "Rare Coin Collection",
-    img: "https://via.placeholder.com/300x200?text=Coin+Collection",
-    yourBid: 800,
-    currentBid: 750,
-    status: "winning",
-    timeLeft: "02h 15m 00s",
-  },
-  {
-    id: 4,
-    title: "Vintage Leather Briefcase",
-    img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
-    yourBid: 180,
-    currentBid: 180,
-    status: "ended",
-    timeLeft: "Ended: 2 days ago",
-  }
-];
-
 const AllBids = () => {
+  const [auctions, setAuctions] = useState([]);
+
+  useEffect(() => {
+    const fetchAuctions = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BID_URL}/getallbids`,
+          { withCredentials: true },
+        );
+        setAuctions(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAuctions();
+  }, []);
+
   return (
-    <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
-      <h2 className="text-xl font-bold mb-4">All Bids</h2>
+    <section className="px-4 pb-20 m-4">
+      <h2 className="text-xl font-bold mb-4">Active Auctions</h2>
 
       <div className="grid md:grid-cols-2 gap-6">
-        {bids.map((bid) => (
-          <div
-            key={bid.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden border"
-          >
-            <img
-              src={bid.img}
-              alt={bid.title}
-              className="w-full h-48 object-cover"
-            />
-
-            <div className="p-4 space-y-2">
-              <h3 className="text-lg font-semibold">{bid.title}</h3>
-
-              <div className="flex justify-between text-sm">
-                <span>Your Bid:</span>
-                <span>${bid.yourBid.toFixed(2)}</span>
+        {auctions.length === 0 ? (
+          <p className="text-gray-500">No active auctions available.</p>
+        ) : (
+          auctions.map((auction) => (
+            <div
+              key={auction.id}
+              className="bg-gray-100 rounded-2xl p-3 shadow-sm"
+            >
+              <div className="p-3">
+                <img
+                  src={auction.img}
+                  alt={auction.title}
+                  className="w-full h-52 object-cover rounded-xl"
+                />
               </div>
 
-              <div className="flex justify-between text-sm">
-                <span>Current Bid:</span>
-                <span>${bid.currentBid.toFixed(2)}</span>
-              </div>
+              <div className="px-4 pb-4 space-y-2">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {auction.title}
+                </h3>
 
-              {bid.status === "winning" && (
-                <span className="inline-block px-3 py-1 bg-green-500 text-white rounded-lg text-xs">
-                  WINNING
-                </span>
-              )}
-              {bid.status === "outbid" && (
-                <span className="inline-block px-3 py-1 bg-red-500 text-white rounded-lg text-xs">
-                  OUTBID
-                </span>
-              )}
-              {bid.status === "ended" && (
-                <span className="inline-block px-3 py-1 bg-gray-500 text-white rounded-lg text-xs">
-                  ENDED
-                </span>
-              )}
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500 font-medium">
+                    Starting Bid:
+                  </span>
+                  <span className="font-semibold">${auction.startingBid}</span>
+                </div>
 
-              <p className="text-xs text-gray-500">
-                {bid.status === "ended" ? bid.timeLeft : `Time Left: ${bid.timeLeft}`}
-              </p>
-
-              <div className="flex gap-2 mt-2">
-                {bid.status === "outbid" && (
-                  <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                    Increase Bid
-                  </button>
-                )}
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500 font-medium">
+                    Current Bid:
+                  </span>
+                  <span className="font-semibold">${auction.currentBid}</span>
+                </div>
 
                 <Link
-                  to={`/auction`} ///${bid.id}
-                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50 text-center block"
+                  to={`/auction/${auction.id}`}
+                  className="block w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white text-center py-2.5 rounded-xl font-medium transition"
                 >
-                  View Item
+                  View & Place Bid
                 </Link>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </section>
   );

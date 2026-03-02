@@ -52,15 +52,11 @@ const Contact = () => {
           <h2 className="font-[font3] text-4xl text-customGreen2 mb-3">User</h2>
           <ul className="space-y-2 flex  md:flex-col lg:flex-row gap-2">
             <li>
-              <a href="/signin" className="bg-midBg font-[font3] rounded-lg px-4 py-2 h-44 text-customGreen2">
+              <a href="/login" className="bg-midBg font-[font3] rounded-lg px-4 py-2 h-44 text-customGreen2">
                 Sign In
               </a>
             </li>
-            <li>
-              <a href="/signup" className="bg-lightBg font-[font3] rounded-lg px-4 py-2 h-44 text-customGreen2">
-                Sign Up
-              </a>
-            </li>
+            
           </ul>
         </div>
 

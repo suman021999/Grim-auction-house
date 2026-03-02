@@ -1,120 +1,165 @@
-//MyBid.jsx
-import { ChevronLeft } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
-const bids = [
-  {
-    id: 1,
-    title: "Vintage Grandfather Clock",
-    img: "https://via.placeholder.com/300x200?text=Grandfather+Clock",
-    yourBid: 1250,
-    currentBid: 1250,
-    status: "winning",
-    timeLeft: "01h 25m 10s",
-  },
-  {
-    id: 2,
-    title: "Antique Silver Teapot",
-    img: "https://via.placeholder.com/300x200?text=Silver+Teapot",
-    yourBid: 320,
-    currentBid: 350,
-    status: "outbid",
-    timeLeft: "00h 45m 30s",
-  },
-  {
-    id: 3,
-    title: "Rare Coin Collection",
-    img: "https://via.placeholder.com/300x200?text=Coin+Collection",
-    yourBid: 800,
-    currentBid: 750,
-    status: "winning",
-    timeLeft: "02h 15m 00s",
-  },
-  {
-    id: 4,
-    title: "Vintage Leather Briefcase",
-    img: "https://via.placeholder.com/300x200?text=Leather+Briefcase",
-    yourBid: 180,
-    currentBid: 180,
-    status: "ended",
-    timeLeft: "Ended: 2 days ago",
-  }
-];
+const MyBids = () => {
+  const [bids, setBids] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-const MyBid = () => {
+  // 🔥 Fetch My Bids
+  const fetchMyBids = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.get(`${import.meta.env.VITE_BID_URL}/getmybids`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBids(res.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch your bids");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyBids();
+  }, []);
+
+  // 🔥 Increase Bid
+  const handleIncreaseBid = async (auctionId, currentBid) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // 🔥 You can change increment logic here
+      const newAmount = currentBid + 100;
+
+      await axios.post(
+        `${import.meta.env.VITE_BID_URL}/placebid`,
+        {
+          auctionId,
+          amount: newAmount,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      alert("Bid Increased Successfully 🚀");
+
+      // 🔥 Refresh without reload
+      fetchMyBids();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to place bid");
+    }
+  };
+
+  if (loading) return <div className="p-6">Loading your bids...</div>;
+  if (error) return <div className="p-6 text-red-500">{error}</div>;
+
   return (
-    <section className="px-4 pb-20 md:py-2 sm:py-20 lg:py-0 m-4">
-      <div className="flex items-center mb-4 gap-4">
-        <Link to="/user" className="bg-white rounded-xl shadow hover:bg-gray-100 transition p-2"><ChevronLeft /></Link>
-        
-       <h2 className="text-xl font-bold ">My Bids</h2>
+    <section className="px-4 pb-20 m-4">
+      {/* Header */}
+      <div className="flex items-center mb-6 gap-4">
+        <Link
+          to="/user"
+          className="bg-white rounded-xl shadow hover:bg-gray-100 transition p-2"
+        >
+          <ChevronLeft />
+        </Link>
+        <h2 className="text-2xl font-bold">My Bids</h2>
       </div>
-      
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {bids.map((bid) => (
-          <div
-            key={bid.id}
-            className="bg-white rounded-xl shadow-md overflow-hidden border"
-          >
-            <img
-              src={bid.img}
-              alt={bid.title}
-              className="w-full h-48 object-cover"
-            />
-
-            <div className="p-4 space-y-2">
-              <h3 className="text-lg font-semibold">{bid.title}</h3>
-
-              <div className="flex justify-between text-sm">
-                <span>Your Bid:</span>
-                <span>${bid.yourBid.toFixed(2)}</span>
+      {bids.length === 0 ? (
+        <div className="text-gray-500 text-center py-10">
+          No active auctions available.
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 gap-6">
+          {bids.map((bid) => (
+            <div key={bid.id} className="bg-gray-100 rounded-2xl p-3 shadow-sm">
+              {/* Image */}
+              <div className="p-3">
+                <img
+                  src={bid.img}
+                  alt={bid.title}
+                  className="w-full h-52 object-cover rounded-xl"
+                />
               </div>
 
-              <div className="flex justify-between text-sm">
-                <span>Current Bid:</span>
-                <span>${bid.currentBid.toFixed(2)}</span>
-              </div>
+              {/* Content */}
+              <div className="px-4 pb-4 space-y-2">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {(() => {
+                    const words = bid.title.split(" ");
+                    return words.length > 2
+                      ? words.slice(0, 2).join(" ") + "..."
+                      : bid.title;
+                  })()}
+                </h3>
 
-              {/* Status Badge */}
-              {bid.status === "winning" && (
-                <span className="inline-block px-3 py-1 bg-green-500 text-white rounded-lg text-xs">WINNING</span>
-              )}
-              {bid.status === "outbid" && (
-                <span className="inline-block px-3 py-1 bg-red-500 text-white rounded-lg text-xs">OUTBID</span>
-              )}
-              {bid.status === "ended" && (
-                <span className="inline-block px-3 py-1 bg-gray-500 text-white rounded-lg text-xs">ENDED</span>
-              )}
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500 font-medium">Your Bid:</span>
+                  <span className="font-semibold">${bid.yourBid}</span>
+                </div>
 
-              <p className="text-xs text-gray-500">
-                {bid.status === "ended"
-                  ? bid.timeLeft
-                  : `Time Left: ${bid.timeLeft}`}
-              </p>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-500 font-medium">
+                    Current Bid:
+                  </span>
+                  <span className="font-semibold">${bid.currentBid}</span>
+                </div>
 
-              {/* Buttons */}
-              <div className="flex gap-2 mt-2">
-                {bid.status === "outbid" && (
-                  <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-                    Increase Bid
-                  </button>
-                )}
+                {/* Status Badge */}
+                <div>
+                  <span
+                    className={`inline-block px-2.5 py-1 text-xs font-bold rounded-md ${
+                      bid.status === "winning"
+                        ? "bg-green-600 text-white"
+                        : "bg-red-500 text-white"
+                    }`}
+                  >
+                    {bid.status.toUpperCase()}
+                  </span>
+                </div>
 
-                <Link
-                  to={`/auction`} ///${bid.id}
-                  className="flex-1 border border-blue-600 text-blue-600 py-2 rounded-lg hover:bg-blue-50 text-center block"
-                >
-                  View Item
-                </Link>
+                {/* Time */}
+                <p className="text-xs text-gray-500">
+                  Ends At: {new Date(bid.time).toLocaleString()}
+                </p>
+
+                {/* Buttons */}
+                <div className="flex gap-3 mt-3">
+                  {bid.status !== "winning" && (
+                    <button
+                      onClick={() => handleIncreaseBid(bid.id, bid.currentBid)}
+                      className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 py-2.5 rounded-xl font-medium transition"
+                    >
+                      Increase Bid
+                    </button>
+                  )}
+
+                  <Link
+                    to={`/auction/${bid.id}`}
+                    className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2.5 rounded-xl font-medium transition"
+                  >
+                    View Item
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
 
-export default MyBid;
+export default MyBids;
