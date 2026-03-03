@@ -22,7 +22,7 @@ const Dashboard = () => {
         <Routes>
           <Route path="/admin" element={<Admin />} />
           <Route path="/user" element={<My_profile />} />
-          <Route path="/auction" element={<Auction />} />
+          <Route path="/auction/:id" element={<Auction />} />
           <Route path="/my_bid" element={<MyBid/>} />
           <Route path="/all_Bids" element={<AllBids/>} />
           <Route path="/message" element={<Message />} />
