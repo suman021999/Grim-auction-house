@@ -1,72 +1,72 @@
+
+
 import mongoose, { Schema } from "mongoose";
 
 const createSchema = new Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     title: {
       type: String,
       required: true,
       trim: true,
     },
+
     description: {
       type: String,
       required: true,
       trim: true,
     },
+
     time: {
       type: String,
       required: true,
     },
+
+    // 🔥 Starting price
     amountBid: {
       type: Number,
       required: true,
       min: 0,
     },
+
+currentBid: {
+  type: Number,
+  default: function() { return this.amountBid; }
+},
+
+    highestBidder: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
     category: {
       type: String,
       required: true,
-      enum: [
-        "Historical",
-        "Electronics",
-        "Automobiles",
-        "Real Estate",
-        "Art",
-        "Antiques",
-        "Jewelry & Watches",
-        "Books & Media",
-      ],
     },
-    height: {
-      type: String,
-      default: 0,
-      min: 0,
-    },
-    width: {
-      type:String,
-      default: 0,
-      min: 0,
-    },
-    length: {
-      type: String,
-      default: 0,
-      min: 0,
-    },
-    weight: {
-      type: String,
-      default: 0,
-      min: 0,
-    },
-    medium: {
-      type: String,
-      trim: true,
-    },
+
     image: {
-      type: String, // URL from Cloudinary 
+      type: String,
+    },
+
+    adminStatus: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected"],
+      default: "Pending",
+    },
+
+    auctionStatus: {
+      type: String,
+      enum: ["Active", "Ended"],
+      default: "Active",
     },
   },
-  {
-    timestamps: true, // adds createdAt & updatedAt automatically
-  }
+  { timestamps: true }
 );
 
 export const Create = mongoose.model("Create", createSchema);
-

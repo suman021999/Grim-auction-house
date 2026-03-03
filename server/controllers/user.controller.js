@@ -5,9 +5,10 @@ import bcrypt from "bcrypt"
 import {User} from '../models/user.models.js';
 
 
+
 const generateToken = (user) => {
   return jwt.sign(
-    { id: user._id, email: user.email, admin: user.admin },
+    { id: user._id, email: user.email, admin: user.admin,role: user.role  },
     process.env.JWT_SECRET,
     { expiresIn: '9999d' }
   );
@@ -69,13 +70,7 @@ export const googleLogin = async (req, res) => {
   }
 };
 
-
-
-
-
 // REGISTER
-
-
 export const registerAccount = asyncHandler(async (req, res) => {
   const { fullname, username, email, password } = req.body;
 
@@ -168,7 +163,7 @@ export const loginAccount = asyncHandler(async (req, res) => {
 export const admin = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 
-  if (!user || !user.admin) {
+  if (!user || user.role !== "admin") {
     return res.status(403).json({ msg: "Access denied. You are not admin." });
   }
 
@@ -179,7 +174,7 @@ export const admin = asyncHandler(async (req, res) => {
   });
 });
 
-
+// LOGOUT
 export const logout = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
     httpOnly: true,
