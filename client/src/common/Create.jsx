@@ -93,7 +93,7 @@ const Create = () => {
             Authorization: `Bearer ${token}`, // ✔ Add token here
           },
           withCredentials: true,
-        }
+        },
       );
 
       console.log("BACKEND RESPONSE:", res.data);
@@ -224,10 +224,10 @@ const Create = () => {
           {["height", "width", "length", "weight"].map((dim) => (
             <div key={dim}>
               <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
-                {dim} {dim !== 'weight' ? '(cm)' : '(kg)'}
+                {dim} {dim !== "weight" ? "(cm)" : "(kg)"}
               </label>
               <input
-                type="text"
+                type="number"
                 name={dim}
                 value={formData[dim]}
                 onChange={handleChange}
@@ -259,7 +259,10 @@ const Create = () => {
             Image
           </label>
           <div className="flex items-center gap-3">
-            <label htmlFor="image1" className="border border-gray-400 px-3 py-1 rounded cursor-pointer text-sm bg-gray-100 hover:bg-gray-300 transition">
+            <label
+              htmlFor="image1"
+              className="border border-gray-400 px-3 py-1 rounded cursor-pointer text-sm bg-gray-100 hover:bg-gray-300 transition"
+            >
               Choose File
             </label>
             <span className="text-gray-600 text-sm">

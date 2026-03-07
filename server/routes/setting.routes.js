@@ -1,17 +1,20 @@
-// import {Router} from "express";
-// import {
-//   getSettings,
-//   updateAccountSettings,
-//   updateNotificationPreferences,
-//   updatePrivacySettings,
-// } from "../controllers/setting.controllers.js";
-// import { protect } from "../middleware/auth.middleware.js";
+//setting.routes.js
 
-// const router = Router();
+import express from "express";
+import {
+  getSettings,
+  updatePassword,
+  updatePrivacy,
+} from "../controllers/setting.controller.js";
 
-// router.get("/", protect, getSettings);
-// router.put("/account", protect, updateAccountSettings);
-// router.put("/notifications", protect, updateNotificationPreferences);
-// router.put("/privacy", protect, updatePrivacySettings);
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
-// export default router;
+const router = express.Router();
+
+router.route("/get").get( authMiddleware, getSettings);
+
+router.route("/password").put( authMiddleware, updatePassword);
+
+router.route("/privacy").put( authMiddleware, updatePrivacy);
+
+export default router;

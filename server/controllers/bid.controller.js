@@ -22,6 +22,10 @@ export const placeBid = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Bid must be higher than current bid" });
   }
 
+  if (new Date(auction.time) < new Date()) {
+  return res.status(400).json({ message: "Auction has ended" });
+}
+
   // 🔥 1️⃣ Mark previous winning bid as Outbid
   await Bid.updateMany(
     { auction: auctionId, bidStatus: "Winning" },
@@ -79,10 +83,12 @@ export const getAllBids = asyncHandler(async (req, res) => {
 });
 
 //Mybids
+// controllers/bidController.js
+
 export const getMyBids = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  // 🔥 1️⃣ Get auctions created by this user (approved only)
+  // 🔥 1️⃣ Get auctions created by this user
   const myCreatedAuctions = await Create.find({
     user: userId,
     adminStatus: "Approved",
@@ -91,12 +97,15 @@ export const getMyBids = asyncHandler(async (req, res) => {
   // 🔥 2️⃣ Get bids placed by this user
   const myBids = await Bid.find({ user: userId }).populate("auction");
 
-  const bidAuctionIds = myBids.map(b => b.auction._id.toString());
+  // 🔥 Prevent crash if auction is null
+  const bidAuctionIds = myBids
+    .filter((b) => b.auction)
+    .map((b) => b.auction._id.toString());
 
-  // 🔥 3️⃣ Format created auctions (only if user has NOT placed bid already)
+  // 🔥 3️⃣ Format created auctions
   const createdFormatted = myCreatedAuctions
-    .filter(a => !bidAuctionIds.includes(a._id.toString()))
-    .map(a => ({
+    .filter((a) => !bidAuctionIds.includes(a._id.toString()))
+    .map((a) => ({
       id: a._id,
       bidId: null,
       title: a.title,
@@ -108,26 +117,34 @@ export const getMyBids = asyncHandler(async (req, res) => {
           ? "winning"
           : "outbid",
       time: a.time,
+      auctionStatus: a.auctionStatus, // 🔥 send status
     }));
 
-  // 🔥 4️⃣ Format actual bids
-  const bidFormatted = myBids.map(b => ({
-    id: b.auction._id,
-    bidId: b._id,
-    title: b.auction.title,
-    img: b.auction.image,
-    yourBid: b.amount,
-    currentBid: b.auction.currentBid,
-    status:
-      b.auction.highestBidder?.toString() === userId.toString()
-        ? "winning"
-        : "outbid",
-    time: b.auction.time,
-  }));
+  // 🔥 4️⃣ Format bids
+  const bidFormatted = myBids
+    .filter((b) => b.auction) // prevent null auction crash
+    .map((b) => ({
+      id: b.auction._id,
+      bidId: b._id,
+      title: b.auction.title,
+      img: b.auction.image,
+      yourBid: b.amount,
+      currentBid: b.auction.currentBid,
+      status:
+        b.auction.highestBidder?.toString() === userId.toString()
+          ? "winning"
+          : "outbid",
+      time: b.auction.time,
+      auctionStatus: b.auction.auctionStatus, // 🔥 send status
+    }));
 
-  // 🔥 5️⃣ Merge both
-  res.json([...bidFormatted, ...createdFormatted]);
+  // 🔥 5️⃣ Merge results
+  const result = [...bidFormatted, ...createdFormatted];
+
+  res.status(200).json(result);
 });
+
+
 //bid history
 export const getBidHistory = asyncHandler(async (req, res) => {
   const { auctionId } = req.params;

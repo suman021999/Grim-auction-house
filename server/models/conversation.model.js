@@ -1,27 +1,28 @@
-// models/chat.models.js
+// models/conversation.model.js
+
 import mongoose from "mongoose";
 
-const chatSchema = new mongoose.Schema(
+const conversationSchema = new mongoose.Schema(
   {
     auctionId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Create", // your auction model
+      ref: "Create",
       required: true,
     },
-    sender: {
+
+    buyer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    message: {
-      type: String,
+
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      trim: true,
     },
-  
-    
   },
   { timestamps: true }
 );
 
-export const Chat = mongoose.model("Chat", chatSchema);
+export const Conversation = mongoose.model("Conversation",conversationSchema);

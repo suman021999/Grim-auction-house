@@ -1,5 +1,3 @@
-
-
 import mongoose, { Schema } from "mongoose";
 
 const createSchema = new Schema(
@@ -34,10 +32,12 @@ const createSchema = new Schema(
       min: 0,
     },
 
-currentBid: {
-  type: Number,
-  default: function() { return this.amountBid; }
-},
+    currentBid: {
+      type: Number,
+      default: function () {
+        return this.amountBid;
+      },
+    },
 
     highestBidder: {
       type: mongoose.Schema.Types.ObjectId,
@@ -64,6 +64,31 @@ currentBid: {
       type: String,
       enum: ["Active", "Ended"],
       default: "Active",
+    },
+    // 🔥 NEW FIELDS FOR ITEM DETAILS
+    height: {
+      type: Number,
+      default: 0,
+    },
+
+    width: {
+      type: Number,
+      default: 0,
+    },
+
+    length: {
+      type: Number,
+      default: 0,
+    },
+
+    weight: {
+      type: Number,
+      default: 0,
+    },
+
+    medium: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Sidebar from '../common/Sidebar'
 import Auction from '../components/dis_compmonents/Auction/Auction'
+import MyAuction from '../components/dis_compmonents/Auction/MyAuction'
 import AllBids from '../components/dis_compmonents/Bid/AllBids'
 import MyBid from '../components/dis_compmonents/Bid/MyBid'
 import Message from '../components/dis_compmonents/Message/Message'
@@ -9,6 +10,7 @@ import Setting from '../components/dis_compmonents/Setting/Setting'
 import Admin from '../components/dis_compmonents/Admin/Admin'
 import My_profile from '../components/dis_compmonents/My_profile/My_profile'
 import Create from '../common/Create'
+
 
 
 
@@ -28,6 +30,8 @@ const Dashboard = () => {
           <Route path="/message" element={<Message />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/Create" element={<Create/>} />
+          <Route path="/my-auctions" element={<MyAuction/>} />
+
         </Routes>
       </main>
     </div>

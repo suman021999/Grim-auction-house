@@ -8,6 +8,7 @@ const My_profile = () => {
     <>
       <Setting/>
 
+
       <div className="px-4 sm:px-8 py-6 overflow-x-hidden mb-20 sm:mb-15">
         
         <Link

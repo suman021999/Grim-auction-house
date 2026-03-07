@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { CircleUserRound, History, MessageSquare, Plus } from "lucide-react";
 import logo from "/logos/logo.png";
 import { HiOutlineUserGroup } from "react-icons/hi2";
-
+import { ImHammer2 } from "react-icons/im";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../hooks/authSlice";
 import axios from "axios";
@@ -59,7 +59,8 @@ const Sidebar = () => {
       : []),
 
     { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
-    { id: "bids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
+    { id: "myauction", label: "My Auction", icon: <ImHammer2  size={18} />, path: "/my-auctions" },
+    { id: "allbids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
     { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
   ];
 

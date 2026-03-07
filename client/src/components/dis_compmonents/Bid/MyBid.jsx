@@ -107,27 +107,38 @@ const MyBids = () => {
 
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 font-medium">Your Bid:</span>
-                  <span className="font-semibold">${bid.yourBid}</span>
+                  <span className="font-semibold text-right break-all max-w-[60%]">
+                    ${Number(bid.yourBid).toLocaleString()}
+                  </span>
                 </div>
 
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 font-medium">
                     Current Bid:
                   </span>
-                  <span className="font-semibold">${bid.currentBid}</span>
+                  <span className="font-semibold text-right break-all max-w-[60%]">
+                    ${Number(bid.currentBid).toLocaleString()}
+                  </span>
                 </div>
 
                 {/* Status Badge */}
                 <div>
-                  <span
-                    className={`inline-block px-2.5 py-1 text-xs font-bold rounded-md ${
-                      bid.status === "winning"
-                        ? "bg-green-600 text-white"
-                        : "bg-red-500 text-white"
-                    }`}
-                  >
-                    {bid.status.toUpperCase()}
-                  </span>
+                  {new Date(bid.time) < new Date() ||
+                  bid.auctionStatus === "Ended" ? (
+                    <span className="inline-block px-2.5 py-1 text-xs font-bold rounded-md bg-gray-700 text-white">
+                      ENDED
+                    </span>
+                  ) : (
+                    <span
+                      className={`inline-block px-2.5 py-1 text-xs font-bold rounded-md ${
+                        bid.status === "winning"
+                          ? "bg-green-600 text-white"
+                          : "bg-red-500 text-white"
+                      }`}
+                    >
+                      {bid.status.toUpperCase()}
+                    </span>
+                  )}
                 </div>
 
                 {/* Time */}
@@ -137,14 +148,17 @@ const MyBids = () => {
 
                 {/* Buttons */}
                 <div className="flex gap-3 mt-3">
-                  {bid.status !== "winning" && (
-                    <button
-                      onClick={() => handleIncreaseBid(bid.id, bid.currentBid)}
-                      className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 py-2.5 rounded-xl font-medium transition"
-                    >
-                      Increase Bid
-                    </button>
-                  )}
+                  {new Date(bid.time) > new Date() &&
+                    bid.status !== "winning" && (
+                      <button
+                        onClick={() =>
+                          handleIncreaseBid(bid.id, bid.currentBid)
+                        }
+                        className="w-full bg-gray-300 hover:bg-gray-400 text-gray-800 py-2.5 rounded-xl font-medium transition"
+                      >
+                        Increase Bid
+                      </button>
+                    )}
 
                   <Link
                     to={`/auction/${bid.id}`}
