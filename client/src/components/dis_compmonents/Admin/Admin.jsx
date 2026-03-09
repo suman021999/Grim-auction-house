@@ -1,5 +1,5 @@
 // Admin.jsx
-import { Bell } from "lucide-react";
+// import { Bell } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "./Modal";
@@ -186,7 +186,7 @@ export default function Admin() {
             </div>
 
             <div className="hover:bg-gray-300 flex justify-center items-center w-10 h-10 rounded-full">
-              <Bell size={18} className="text-black" />
+              {/* <Bell size={18} className="text-black" /> */}
             </div>
           </div>
 
