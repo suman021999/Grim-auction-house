@@ -21,7 +21,7 @@ const createSchema = new Schema(
     },
 
     time: {
-      type: String,
+      type: Date,
       required: true,
     },
 
