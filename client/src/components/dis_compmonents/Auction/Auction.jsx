@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -28,15 +27,55 @@ const Auction = () => {
       FETCH AUCTION
   ========================= */
 
+  // useEffect(() => {
+  //   const fetchAuction = async () => {
+  //     const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
+  //     setAuction(res.data.auction);
+  //   };
+
+  //   fetchAuction();
+  // }, [id]);
+
+
+
   useEffect(() => {
-    const fetchAuction = async () => {
-      const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
-      setAuction(res.data.auction);
-    };
+  if (!auction?._id) return;
 
-    fetchAuction();
-  }, [id]);
+  socket.emit("joinAuction", auction._id);
 
+  const handleBidPlaced = (data) => {
+    if (data.auctionId === auction._id) {
+      setAuction((prev) => ({
+        ...prev,
+        currentBid: data.amount,
+      }));
+    }
+  };
+
+  const handleBidHistory = (data) => {
+    setBids(data);
+  };
+
+  const handleAuctionEnded = (data) => {
+    if (data.auctionId === auction._id) {
+      setAuction((prev) => ({
+        ...prev,
+        auctionStatus: "Ended",
+        soldOut: true,
+      }));
+    }
+  };
+
+  socket.on("bidPlaced", handleBidPlaced);
+  socket.on("bidHistoryUpdate", handleBidHistory);
+  socket.on("auctionEnded", handleAuctionEnded);
+
+  return () => {
+    socket.off("bidPlaced", handleBidPlaced);
+    socket.off("bidHistoryUpdate", handleBidHistory);
+    socket.off("auctionEnded", handleAuctionEnded);
+  };
+}, [auction?._id]);
   /* =========================
       SOCKET CONNECTION
   ========================= */
@@ -267,7 +306,7 @@ const Auction = () => {
           </div>
 
           {/* END BUTTON */}
-          {storedUser?._id ||  storedUser?.id === auction.user && !isAuctionEnded && (
+          {(storedUser?._id === auction.user || storedUser?.id === auction.user) && !isAuctionEnded && (
             <button
               onClick={handleEndAuction}
               className="bg-red-600 text-white px-6 py-2 rounded-lg mb-6"
