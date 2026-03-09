@@ -74,17 +74,19 @@ const Create = () => {
   // ---------------------------
   // ✅ FINAL WORKING SUBMIT WITH AXIOS + TOKEN
   // ---------------------------
- const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
     const form = new FormData();
 
-    const utcTime = new Date(formData.time).toISOString(); // ✅ convert
+    // ✅ Convert selected local time to UTC
+    const utcTime = new Date(formData.time).toISOString();
 
+    // ✅ Append all fields
     Object.keys(formData).forEach((key) => {
       if (key === "time") {
-        form.append("time", utcTime);
+        form.append("time", utcTime); // use converted time
       } else {
         form.append(key, formData[key]);
       }
@@ -104,7 +106,10 @@ const Create = () => {
       }
     );
 
+    console.log("Server response:", res.data);
+
     toast.success("Product created successfully!");
+
   } catch (err) {
     console.error(err);
     toast.error("Something went wrong");
