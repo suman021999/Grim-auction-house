@@ -3,11 +3,13 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Auth from "../auth/Auth";
 import Dashboard from "./Dashboard";
 import Display from "./Display";
+import { Toaster } from "react-hot-toast";
 
 
 const MainPage = () => {
   return (
     <>
+    <Toaster position="top-right" reverseOrder={false} />
       <Routes>
         {/* Landing / Banner page */}
         <Route path="/" element={<Display />} />

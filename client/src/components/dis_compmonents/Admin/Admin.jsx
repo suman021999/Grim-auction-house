@@ -337,3 +337,4 @@ const StatusBadge = ({ status }) => {
 
   return <span className={`${base} bg-gray-100 text-gray-700`}>{status}</span>;
 };
+

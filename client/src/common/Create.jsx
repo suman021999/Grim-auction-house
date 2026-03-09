@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
+import toast from "react-hot-toast";
 
 const Create = () => {
   const [formData, setFormData] = useState({
@@ -98,7 +99,7 @@ const Create = () => {
 
       console.log("BACKEND RESPONSE:", res.data);
 
-      alert("Product created successfully!");
+      toast.success("Product created successfully!");
 
       // Optional: clear form
       setFormData({
@@ -116,7 +117,7 @@ const Create = () => {
       });
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
