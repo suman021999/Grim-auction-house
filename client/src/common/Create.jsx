@@ -18,14 +18,19 @@ const Create = () => {
     image: null,
   });
 
-  // ✅ Listen for socket events (optional)
+
+
+  // ---------------------------
+  // ✅ SOCKET.IO CONNECTION
+  // ---------------------------
   useEffect(() => {
+  
     socket.on("connect", () => {
-      console.log("SOCKET CONNECTED:", socket.id);
+      console.log("SOCKET CONNECTED:", s.id);
     });
 
     socket.on("auctionCreated", (auction) => {
-      console.log("Auction Created:", auction);
+      console.log("Auction Created (socket event):", auction);
     });
 
     socket.on("timeUpdate", (data) => {
@@ -37,6 +42,10 @@ const Create = () => {
       socket.off("timeUpdate");
     };
   }, []);
+
+  // ---------------------------
+  // FORM HANDLERS
+  // ---------------------------
 
   const categories = [
     "Historical",
@@ -51,52 +60,56 @@ const Create = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // ---------------------------
+  // ✅ FINAL WORKING SUBMIT WITH AXIOS + TOKEN
+  // ---------------------------
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const form = new FormData();
+  try {
+    const form = new FormData();
 
-      const utcTime = new Date(formData.time).toISOString();
+    // ✅ Convert selected local time to UTC
+    const utcTime = new Date(formData.time).toISOString();
 
-      Object.keys(formData).forEach((key) => {
-        if (key === "time") {
-          form.append("time", utcTime);
-        } else {
-          form.append(key, formData[key]);
-        }
-      });
+    // ✅ Append all fields
+    Object.keys(formData).forEach((key) => {
+      if (key === "time") {
+        form.append("time", utcTime); // use converted time
+      } else {
+        form.append(key, formData[key]);
+      }
+    });
 
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_AUCTION_URL}/create`,
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
+    const res = await axios.post(
+      `${import.meta.env.VITE_AUCTION_URL}/create`,
+      form,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
 
-      console.log("Server response:", res.data);
+    console.log("Server response:", res.data);
 
-      toast.success("Product created successfully!");
+    toast.success("Product created successfully!");
 
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong");
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Something went wrong");
+  }
+};
 
   // ----------------------------------------------------------
   // NOTE: BELOW THIS LINE YOUR UI IS 100% EXACTLY SAME
