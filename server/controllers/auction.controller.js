@@ -4,6 +4,7 @@ import { Create } from "../models/create.models.js";
 import { uploadAuctionImage } from "../config/cloudinary.js";
 import { startAuctionCountdown } from "../utils/auctionTimer.js";
 import { Conversation } from "../models/conversation.model.js";
+import { Bid } from "../models/bid.models.js";
 
 // ✔ Create Auction
 export const createAuction = asyncHandler(async (req, res) => {
@@ -11,7 +12,7 @@ export const createAuction = asyncHandler(async (req, res) => {
     const {
       title,
       description,
-      time, // expected ISO string or parseable date
+      time,
       amountBid,
       category,
       height,
@@ -21,77 +22,75 @@ export const createAuction = asyncHandler(async (req, res) => {
       medium,
     } = req.body;
 
-    // Basic validation
+    // validation
     if (!title || !description || !time || !amountBid || !category) {
-      return res.status(400).json({ message: "Missing required fields." });
+      return res.status(400).json({
+        success: false,
+        message: "Required fields missing",
+      });
     }
 
-    // Upload image if provided
+    // image upload
     let imageUrl = "";
+
     if (req.file && req.file.buffer) {
       try {
         imageUrl = await uploadAuctionImage(req.file.buffer, req.file.mimetype);
-      } catch (uploadErr) {
-        console.error("Cloudinary upload failed:", uploadErr);
-        return res.status(500).json({ message: "Image upload failed." });
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
+        return res.status(500).json({
+          success: false,
+          message: "Image upload failed",
+        });
       }
     }
 
-    // Create auction document
+    // create auction
     const auction = await Create.create({
       user: req.user._id,
       title,
       description,
-      time,
+      time: new Date(time),
       amountBid: Number(amountBid),
+      currentBid: Number(amountBid),
       category,
-      height: Number(height),
-      width: Number(width),
-      length: Number(length),
-      weight: Number(weight),
+      height: height ? Number(height) : null,
+      width: width ? Number(width) : null,
+      length: length ? Number(length) : null,
+      weight: weight ? Number(weight) : null,
       medium,
       image: imageUrl,
       adminStatus: "Pending",
       auctionStatus: "Active",
+      soldOut: false,
     });
 
-    // Get io and broadcast new auction to clients
-    try {
-      const io = req.app.get("io");
-      if (io) {
-        // Broadcast newly created auction globally (or adjust to emit to admin clients)
-        io.emit("auctionCreated", auction);
+    // socket instance
+    const io = req.app.get("io");
 
-        // Start the countdown for this auction (if time is valid)
-        // Ensure auction.time is an ISO string or convertible to Date
-        startAuctionCountdown(io, auction._id.toString(), auction.time);
-      } else {
-        console.warn(
-          "Socket.IO instance not found on app (app.get('io') returned falsy)."
-        );
-      }
-    } catch (emitErr) {
-      // Non-fatal: log but don't fail the request
-      console.warn(
-        "Error using Socket.IO for auction creation/start countdown:",
-        emitErr
-      );
+    if (io) {
+      // broadcast new auction
+      io.emit("auctionCreated", auction);
+
+      // start countdown
+      startAuctionCountdown(io, auction._id.toString(), auction.time);
     }
 
-    return res.status(201).json({
-      message: "Auction created successfully.",
-      auction: {
-        ...auction._doc,
-        amountBid: `$${auction.amountBid}`, // <–– always returns with $
-      },
+    res.status(201).json({
+      success: true,
+      message: "Auction created successfully",
+      auction,
     });
   } catch (error) {
     console.error("Create auction error:", error);
-    return res
-      .status(500)
-      .json({ message: "Server error while creating auction." });
+
+    res.status(500).json({
+      success: false,
+      message: "Server error creating auction",
+    });
   }
 });
+
 // admin dashboard data
 export const adminDashboard = asyncHandler(async (req, res) => {
   try {
@@ -105,7 +104,7 @@ export const adminDashboard = asyncHandler(async (req, res) => {
       image: item.image || "",
       name: item.title,
       bid: item.amountBid ?? 0,
-      currentBid: item.amountBid ?? 0,
+      currentBid: item.currentBid ?? item.amountBid ?? 0,
       time: item.time,
       category: item.category,
       createdAt: item.createdAt,
@@ -120,8 +119,6 @@ export const adminDashboard = asyncHandler(async (req, res) => {
       rejected: all.filter((i) => i.adminStatus === "Rejected").map(formatItem),
     };
 
-    // ✅ HISTORY = auctionStatus items
-
     // ✅ HISTORY = ONLY APPROVED auctions
     const history = {
       active: all
@@ -129,12 +126,6 @@ export const adminDashboard = asyncHandler(async (req, res) => {
           (i) => i.auctionStatus === "Active" && i.adminStatus === "Approved"
         )
         .map(formatItem),
-
-      // winning: all
-      //   .filter(i => i.auctionStatus === "Winning" && i.adminStatus === "Approved").map(formatItem),
-
-      // outbid: all
-      //   .filter(i => i.auctionStatus === "Outbid" && i.adminStatus === "Approved").map(formatItem),
 
       ended: all
         .filter(
@@ -147,7 +138,7 @@ export const adminDashboard = asyncHandler(async (req, res) => {
       activeAuctions: history.active.length,
       activeUsers: new Set(history.active.map((i) => i.username)).size,
       revenue: history.ended.reduce(
-        (acc, cur) => acc + (cur.amountBid ?? 0),
+        (acc, cur) => acc + (cur.currentBid ?? 0),
         0
       ),
     };
@@ -232,7 +223,8 @@ export const getSingleAuction = asyncHandler(async (req, res) => {
   });
 });
 
- export const getMyAuctions = async (req, res) => {
+// ✔ GET MY AUCTIONS
+export const getMyAuctions = async (req, res) => {
   try {
     const auctions = await Create.find({ user: req.user._id }).sort({
       createdAt: -1,
@@ -244,6 +236,7 @@ export const getSingleAuction = asyncHandler(async (req, res) => {
   }
 };
 
+// ✔ End Auction
 export const endAuction = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -255,29 +248,51 @@ export const endAuction = asyncHandler(async (req, res) => {
 
   auction.auctionStatus = "Ended";
   auction.soldOut = true;
+
   await auction.save();
 
-  // 🔥 find highest bid
-  const highestBid = await Bid.findOne({ auctionId: id })
+  const highestBid = await Bid.findOne({ auction: id })
     .sort({ amount: -1 })
     .populate("user");
 
-  const existingConversation = await Conversation.findOne({
-    auctionId: auction._id,
-  });
+  let conversation = null;
 
-  if (!existingConversation && highestBid) {
-    await Conversation.create({
+  if (highestBid) {
+    conversation = await Conversation.findOne({
       auctionId: auction._id,
       buyer: highestBid.user._id,
       seller: auction.user,
     });
+
+    if (!conversation) {
+      conversation = await Conversation.create({
+        auctionId: auction._id,
+        buyer: highestBid.user._id,
+        seller: auction.user,
+      });
+    }
+  }
+
+  // 🔥 SOCKET EVENT
+  const io = req.app.get("io");
+
+  io.to(id).emit("auctionEnded", {
+    auctionId: id,
+    soldOut: true,
+    winner: highestBid?.user,
+  });
+
+  if (conversation) {
+    io.to(highestBid.user._id.toString()).emit(
+      "conversationCreated",
+      conversation
+    );
+
+    io.to(auction.user.toString()).emit("conversationCreated", conversation);
   }
 
   res.json({
     success: true,
-    message: "Auction ended and conversation created",
+    message: "Auction ended",
   });
 });
-
-

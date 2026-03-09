@@ -10,7 +10,7 @@ const AllBids = () => {
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_BID_URL}/getallbids`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         setAuctions(res.data);

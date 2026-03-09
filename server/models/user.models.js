@@ -13,6 +13,8 @@ const userSchema = new Schema(
       required: true,
       trim: true,
       index: true,
+      minlength: 4,
+      maxlength: 4,
     },
     email: {
       type: String,
@@ -37,7 +39,7 @@ const userSchema = new Schema(
       type: String,
       // Make password optional for OAuth users
       required: function () {
-        return !(this.googleId || this.provider);
+        return this.provider === "local";
       },
     },
 

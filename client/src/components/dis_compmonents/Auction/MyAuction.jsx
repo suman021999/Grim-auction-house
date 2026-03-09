@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 const MyAuction = () => {
   const [auctions, setAuctions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +16,7 @@ const MyAuction = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setAuctions(res.data);
@@ -77,9 +76,7 @@ const MyAuction = () => {
                     <span className="text-gray-500 font-medium">
                       Starting Bid:
                     </span>
-                    <span className="font-semibold">
-                      ₹{auction.amountBid}
-                    </span>
+                    <span className="font-semibold">₹{auction.amountBid}</span>
                   </div>
 
                   {/* Current Bid */}
@@ -87,9 +84,7 @@ const MyAuction = () => {
                     <span className="text-gray-500 font-medium">
                       Current Bid:
                     </span>
-                    <span className="font-semibold">
-                      ₹{auction.currentBid}
-                    </span>
+                    <span className="font-semibold">₹{auction.currentBid}</span>
                   </div>
 
                   {/* Status */}

@@ -23,6 +23,16 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    process.env.FRONTEND_URL || "http://localhost:5173",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
 // Socket.IO Configuration
 const io = new Server(server, {
   cors: {
@@ -38,15 +48,7 @@ app.set('io', io);
 // Database connection
 database();
 
-// CORS Configuration
-const corsOptions = {
-  origin: [
-    process.env.FRONTEND_URL || "http://localhost:5173",
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  optionsSuccessStatus: 200,
-};
+
 
 // Middleware
 app.use(cors(corsOptions));

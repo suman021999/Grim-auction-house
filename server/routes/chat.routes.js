@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Get all messages of auction
 router.get("/:auctionId",  getMessages);
+
 // Save message
 router.post("/", authMiddleware, saveMessage);
 

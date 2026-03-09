@@ -1,74 +1,67 @@
-import asyncHandler from 'express-async-handler';
+import asyncHandler from "express-async-handler";
 import { OAuth2Client } from "google-auth-library";
-import jwt from 'jsonwebtoken';
-import bcrypt from "bcrypt"
-import {User} from '../models/user.models.js';
-
-
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { User } from "../models/user.models.js";
 
 const generateToken = (user) => {
   return jwt.sign(
-    { id: user._id, email: user.email, admin: user.admin,role: user.role  },
+    { id: user._id, email: user.email, admin: user.admin, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '9999d' }
+    { expiresIn: "9999d" }
   );
 };
 
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-export const googleLogin = async (req, res) => {
-  try {
-    const { token } = req.body; // frontend sends Google ID token
+// GOOGLE LOGIN
+export const googleLogin = asyncHandler(async (req, res) => {
+  const { token } = req.body;
 
-    if (!token) {
-      return res.status(400).json({ msg: "No token provided" });
-    }
-
-    // Verify token with Google
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    const { email, name, picture, sub: googleId } = payload;
-
-    // Check if user already exists
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      // Create new user if not exists
-      user = new User({
-        fullname: name.toLowerCase().replace(/\s+/g, "_"),
-        username: name, 
-        email,
-        googleId,
-        provider: "google",
-        avatar: picture,
-        password: null, // no password for google users
-      });
-      await user.save();
-    }
-
-    // Generate JWT
-    const jwtToken = generateToken(user);
-
-    res.json({
-      success: true,
-      token: jwtToken,
-      user: {
-        id: user._id,
-        fullname: user.fullname,
-        username: user.username, 
-        email: user.email,
-        avatar: user.avatar,
-        provider: user.provider,
-      },
-    });
-  } catch (err) {
-    console.error("Google login error:", err);
-    res.status(500).json({ msg: "Google login failed" });
+  if (!token) {
+    res.status(400);
+    throw new Error("No token provided");
   }
-};
+
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+
+  const { email, name, picture, sub } = payload;
+
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    const username = email.split("@")[0].slice(0, 4);
+
+    user = await User.create({
+      fullname: name,
+      username,
+      email,
+      googleId: sub,
+      provider: "google",
+      avatar: picture,
+      password: null,
+    });
+  }
+
+  const jwtToken = generateToken(user);
+
+  res.json({
+    success: true,
+    token: jwtToken,
+    user: {
+      id: user._id,
+      fullname: user.fullname,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar,
+    },
+  });
+});
 
 // REGISTER
 export const registerAccount = asyncHandler(async (req, res) => {
@@ -82,6 +75,11 @@ export const registerAccount = asyncHandler(async (req, res) => {
   if (password.length < 8) {
     res.status(400);
     throw new Error("Password must be at least 8 characters");
+  }
+
+  if (username.length !== 4) {
+    res.status(400);
+    throw new Error("Username must be exactly 4 characters");
   }
 
   const exist = await User.findOne({
@@ -124,7 +122,6 @@ export const registerAccount = asyncHandler(async (req, res) => {
     },
   });
 });
-
 
 // LOGIN
 export const loginAccount = asyncHandler(async (req, res) => {
@@ -185,7 +182,3 @@ export const logout = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "Logged out successfully" });
 });
-
-
-
-

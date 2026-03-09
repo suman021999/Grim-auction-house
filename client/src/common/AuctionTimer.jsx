@@ -1,4 +1,3 @@
-
 import { Heart, Eye } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -7,12 +6,12 @@ export default function AuctionCard() {
     days: 80,
     hours: 6,
     minutes: 11,
-    seconds: 4
+    seconds: 4,
   });
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         if (prev.seconds > 0) {
           return { ...prev, seconds: prev.seconds - 1 };
         } else if (prev.minutes > 0) {
@@ -20,7 +19,13 @@ export default function AuctionCard() {
         } else if (prev.hours > 0) {
           return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
         } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
+          return {
+            ...prev,
+            days: prev.days - 1,
+            hours: 23,
+            minutes: 59,
+            seconds: 59,
+          };
         }
         return prev;
       });
@@ -33,20 +38,21 @@ export default function AuctionCard() {
     <section className="group max-w-72 mx-auto  border-2 border-gray-300 rounded-2xl shadow-lg overflow-hidden">
       {/* Image Section */}
       <div className="relative">
-        <img 
-          src="https://probid-wp.egenstheme.com/antiques-auction/wp-content/uploads/sites/8/2024/10/product-13-1.webp" 
+        <img
+          src="https://probid-wp.egenstheme.com/antiques-auction/wp-content/uploads/sites/8/2024/10/product-13-1.webp"
           alt="Stack of antique books"
           className="w-full h-64 object-cover p-1 rounded-2xl"
         />
 
         {/* Hover Gradient Overlay */}
-<div className="absolute inset-0 rounded-2xl p-1 overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-br from-gray-200/60 to-gray-300/60 
+        <div className="absolute inset-0 rounded-2xl p-1 overflow-hidden">
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-gray-200/60 to-gray-300/60 
                   opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-150 
-                  origin-center transition-all duration-700 ease-out rounded-2xl "></div>
-</div>
+                  origin-center transition-all duration-700 ease-out rounded-2xl "
+          ></div>
+        </div>
 
-        
         {/* Live Badge */}
         <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full flex items-center text-sm font-medium">
           <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
@@ -67,19 +73,27 @@ export default function AuctionCard() {
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-full px-6 py-1 shadow-lg">
           <div className="flex items-center space-x-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-gray-900">{timeLeft.days}</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {timeLeft.days}
+              </div>
               <div className="text-xs font-[font3] text-gray-500">Days</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-gray-900">{timeLeft.hours}</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {timeLeft.hours}
+              </div>
               <div className="text-xs font-[font3] text-gray-500">Hours</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-gray-900">{timeLeft.minutes}</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {timeLeft.minutes}
+              </div>
               <div className="text-xs font-[font3] text-gray-500">Minutes</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-gray-900">{timeLeft.seconds}</div>
+              <div className="text-2xl font-bold text-gray-900">
+                {timeLeft.seconds}
+              </div>
               <div className="text-xs font-[font3] text-gray-500">Seconds</div>
             </div>
           </div>
@@ -91,26 +105,26 @@ export default function AuctionCard() {
         <h2 className="text-xl font-[font3] font-semibold text-customGreen3 mb-4 leading-tight">
           Canvas & culture brush within elegance auction.
         </h2>
-        
+
         <div className="flex items-center justify-between gap-2">
-          
-            <div>
-            <p className="text-sm text-gray-500 mb-1 font-[font3]">Current bid:</p>
+          <div>
+            <p className="text-sm text-gray-500 mb-1 font-[font3]">
+              Current bid:
+            </p>
             <p className="text-2xl font-bold text-gray-900">$9,900.00</p>
           </div>
           <span className="border-1 h-10 mt-10"></span>
           <div>
-            <p className="text-sm font-[font3] text-customGreen4 mb-1 capitalize ">buy now:</p>
+            <p className="text-sm font-[font3] text-customGreen4 mb-1 capitalize ">
+              buy now:
+            </p>
             <p className="text-2xl text-customGreen4  font-bold ">$9,900.00</p>
-          
           </div>
-          
         </div>
         <button className="bg-black my-2 group-hover:bg-orange-900 text-white px-6 py-1 rounded-lg font-medium transition-colors">
-            Bid Now
-          </button>
+          Bid Now
+        </button>
       </div>
     </section>
   );
 }
-

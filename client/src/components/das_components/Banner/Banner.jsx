@@ -1,19 +1,18 @@
 import React from "react";
 import Navbar from "../Navigation/Navbar";
 import { data1 } from "../../../../data/data";
-import bannerImg from "/backgrounds/banner.png"
+import bannerImg from "/backgrounds/banner.png";
 
 const Banner = () => {
   return (
-    <section 
-    id="#"
-    className="w-full  py-6 md:py-10"
-    style={{ backgroundImage: `url(${bannerImg})` }}
+    <section
+      id="#"
+      className="w-full  py-6 md:py-10"
+      style={{ backgroundImage: `url(${bannerImg})` }}
     >
       <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20 mb-8">
         <Navbar />
         <div className="flex flex-col md:flex-row mt-8 md:mt-16 w-full">
-          
           {/* Text Section */}
           <div className="right md:w-1/2 mb-8 md:mb-0 md:pr-6 lg:pr-10 lg:mx-6">
             <h1 className="font-[font3] text-customGreen1 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight">
@@ -30,7 +29,6 @@ const Banner = () => {
 
           {/* 3 Scrolling Columns */}
           <div className="left lg:mx-6 md:w-1/2 h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] xl:h-[100vh] mt-6 md:mt-0 rounded-xl flex items-center justify-center overflow-hidden gap-x-1">
-            
             {/* Column 1 (Top ➝ Bottom, 2.5s) */}
             <div className="scroll-wrapper-y w-1/3">
               <div className="scroll-animation-y1 flex flex-col gap-2 items-center">
@@ -72,10 +70,7 @@ const Banner = () => {
                 ))}
               </div>
             </div>
-
           </div>
-
-          
         </div>
       </div>
     </section>
@@ -83,8 +78,3 @@ const Banner = () => {
 };
 
 export default Banner;
-
-
-
-
-

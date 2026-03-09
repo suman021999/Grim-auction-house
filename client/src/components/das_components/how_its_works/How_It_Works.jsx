@@ -45,4 +45,3 @@ const How_It_Works = () => {
 };
 
 export default How_It_Works;
-

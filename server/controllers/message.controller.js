@@ -3,6 +3,7 @@
 import { Conversation } from "../models/conversation.model.js";
 import { Message } from "../models/message.modals.js";
 
+// ✅ Send Message
 export const sendMessage = async (req, res) => {
   try {
     const { conversationId, receiver, text } = req.body;
@@ -20,6 +21,7 @@ export const sendMessage = async (req, res) => {
   }
 };
 
+// ✅ Get Messages for a Conversation
 export const getMessages = async (req, res) => {
   try {
     const { conversationId } = req.params;
@@ -36,6 +38,7 @@ export const getMessages = async (req, res) => {
   }
 };
 
+// ✅ Get User's Conversations
 export const getMyConversations = async (req, res) => {
   const conversations = await Conversation.find({
     $or: [{ buyer: req.user._id }, { seller: req.user._id }],

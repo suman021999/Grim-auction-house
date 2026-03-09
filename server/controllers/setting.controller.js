@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import { User } from "../models/user.models.js";
 import { Setting } from "../models/setting.models.js";
 
-
 // ==========================
 // GET USER SETTINGS
 // ==========================
@@ -27,8 +26,6 @@ export const getSettings = asyncHandler(async (req, res) => {
     dataSharing: setting.dataSharing,
   });
 });
-
-
 
 // ==========================
 // UPDATE PASSWORD
@@ -66,8 +63,6 @@ export const updatePassword = asyncHandler(async (req, res) => {
     message: "Password updated successfully",
   });
 });
-
-
 
 // ==========================
 // UPDATE PRIVACY SETTINGS

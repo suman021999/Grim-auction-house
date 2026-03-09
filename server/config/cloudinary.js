@@ -12,7 +12,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 export const uploadAuctionImage = async (fileBuffer, mimetype) => {
   try {
     if (!fileBuffer) return null;
@@ -34,4 +33,3 @@ export const uploadAuctionImage = async (fileBuffer, mimetype) => {
 
 // ✅ Export the main instance if needed elsewhere
 export default cloudinary;
-

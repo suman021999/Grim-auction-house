@@ -1,12 +1,7 @@
-
 import { Send } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { io } from "socket.io-client";
-
-const socket = io(import.meta.env.VITE_SOCKET_URL, {
-  withCredentials: true,
-});
+import { socket } from "../../../common/socket";
 
 const Chat = ({ auctionId, user }) => {
   const [messages, setMessages] = useState([]);
@@ -20,14 +15,14 @@ const Chat = ({ auctionId, user }) => {
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_CHAT_URL}/${auctionId}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const formatted = res.data.map((msg) => ({
           id: msg._id,
           user: msg.sender?.username,
           text: msg.message,
-          type: msg.sender?._id === user?._id ? "me" : "other",
+          type: msg.sender?._id === (user?._id || user?.id) ? "me" : "other",
         }));
 
         setMessages(formatted);
@@ -49,7 +44,7 @@ const Chat = ({ auctionId, user }) => {
           id: msg._id,
           user: msg.sender?.username,
           text: msg.message,
-          type: msg.sender?._id === user?._id ? "me" : "other",
+          type: msg.sender?._id === (user?._id || user?.id) ? "me" : "other",
         },
       ]);
     });
@@ -61,25 +56,22 @@ const Chat = ({ auctionId, user }) => {
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
-
+    console.log("Sending message:", user);
     // 🔥 Send via socket
     socket.emit("sendMessage", {
       auctionId,
-      senderId: user?._id,
+      senderId: user?._id || user?.id,
       message: newMessage,
     });
 
     setNewMessage("");
   };
 
-  
-
   return (
     <section>
       <h3 className="font-semibold p-2 mb-2">Live Chat</h3>
       <div className="border-t border-gray-300" />
       <div className="flex flex-col h-[650px] mt-2">
-
         {/* Messages */}
         <div className="flex-1 overflow-scroll overflow-x-hidden mb-4 space-y-3 p-4">
           {messages.map((msg) => (
@@ -130,13 +122,9 @@ const Chat = ({ auctionId, user }) => {
             <Send className="w-5 h-5" />
           </button>
         </div>
-
       </div>
     </section>
   );
 };
 
 export default Chat;
-
-
-

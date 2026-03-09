@@ -1,80 +1,114 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { socket } from "../../../common/socket";
 import Chat from "../chat/Chat";
 
 const Auction = () => {
   const { id } = useParams();
+
   const storedUser = JSON.parse(localStorage.getItem("user"));
+
   const [auction, setAuction] = useState(null);
   const [bidAmount, setBidAmount] = useState("");
   const [bids, setBids] = useState([]);
+  const [countdown, setCountdown] = useState("");
+
   const [activeTab, setActiveTab] = useState("description");
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  // Base URLs
   const BASE_AUCTION_URL = import.meta.env.VITE_AUCTION_URL;
   const BASE_BID_URL = import.meta.env.VITE_BID_URL;
   const BASE_REVIEW_URL = import.meta.env.VITE_REVIEW_URL;
 
-  // END AUCTION
-  const handleEndAuction = async () => {
-    try {
-      const res = await axios.put(
-        `${BASE_AUCTION_URL}/end/${auction._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+  /* =========================
+      FETCH AUCTION
+  ========================= */
 
-      alert(res.data.message);
-
-      setAuction({
-        ...auction,
-        auctionStatus: "Ended",
-        soldOut: true,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // Fetch Auction
   useEffect(() => {
     const fetchAuction = async () => {
-      try {
-        const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
-        setAuction(res.data.auction);
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
+      setAuction(res.data.auction);
     };
 
     fetchAuction();
   }, [id]);
 
-  // Fetch Bid History
+  /* =========================
+      SOCKET CONNECTION
+  ========================= */
+
   useEffect(() => {
     if (!auction?._id) return;
 
-    const fetchHistory = async () => {
-      try {
-        const res = await axios.get(`${BASE_BID_URL}/history/${auction._id}`);
-        setBids(res.data.bids);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    socket.emit("joinAuction", auction._id);
 
-    fetchHistory();
+    socket.on("bidPlaced", (data) => {
+      if (data.auctionId === auction._id) {
+        setAuction((prev) => ({
+          ...prev,
+          currentBid: data.amount,
+        }));
+      }
+    });
+
+    socket.on("bidHistoryUpdate", (data) => {
+      setBids(data);
+    });
+
+    socket.on("auctionEnded", (data) => {
+      if (data.auctionId === auction._id) {
+        setAuction((prev) => ({
+          ...prev,
+          auctionStatus: "Ended",
+          soldOut: true,
+        }));
+      }
+    });
+
+    return () => {
+      socket.off("bidPlaced");
+      socket.off("bidHistoryUpdate");
+      socket.off("auctionEnded");
+    };
   }, [auction]);
 
-  // Place Bid
+  /* =========================
+      FETCH BID HISTORY
+  ========================= */
+
+  useEffect(() => {
+    if (!auction?._id) return;
+
+    const fetchBids = async () => {
+      const res = await axios.get(`${BASE_BID_URL}/history/${auction._id}`);
+      setBids(res.data.bids);
+    };
+
+    fetchBids();
+  }, [auction]);
+
+  /* =========================
+      FETCH REVIEWS
+  ========================= */
+
+  useEffect(() => {
+    if (!auction?._id) return;
+
+    const fetchReviews = async () => {
+      const res = await axios.get(`${BASE_REVIEW_URL}/${auction._id}`);
+      setReviews(res.data.reviews);
+    };
+
+    fetchReviews();
+  }, [auction]);
+
+  /* =========================
+      PLACE BID
+  ========================= */
+
   const handlePlaceBid = async () => {
     try {
       await axios.post(
@@ -90,30 +124,31 @@ const Auction = () => {
         },
       );
 
-      alert("Bid placed successfully!");
       setBidAmount("");
-
-      const res = await axios.get(`${BASE_BID_URL}/history/${auction._id}`);
-      setBids(res.data.bids);
     } catch (err) {
-      console.log(err.response?.data);
+      console.log(err);
     }
   };
 
-  useEffect(() => {
-    if (!auction?._id) return;
+  /* =========================
+      END AUCTION
+  ========================= */
 
-    const fetchReviews = async () => {
-      try {
-        const res = await axios.get(`${BASE_REVIEW_URL}/${auction._id}`);
-        setReviews(res.data.reviews);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const handleEndAuction = async () => {
+    await axios.put(
+      `${BASE_AUCTION_URL}/end/${auction._id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+  };
 
-    fetchReviews();
-  }, [auction]);
+  /* =========================
+      SUBMIT REVIEW
+  ========================= */
 
   const handleReviewSubmit = async () => {
     try {
@@ -141,50 +176,78 @@ const Auction = () => {
     }
   };
 
-  if (!auction) return <p className="m-10">Loading...</p>;
+  /* =========================
+      COUNTDOWN TIMER
+  ========================= */
 
-  const isAuctionEnded =
-    auction.soldOut ||
-    auction.auctionStatus === "Ended" ||
-    new Date(auction.time) < new Date();
+  useEffect(() => {
+    if (!auction?.time) return;
+
+    const timer = setInterval(() => {
+      const end = new Date(auction.time).getTime();
+      const now = new Date().getTime();
+
+      const diff = end - now;
+
+      if (diff <= 0) {
+        clearInterval(timer);
+        setCountdown("Auction Ended");
+        handleEndAuction();
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [auction]);
+
+  if (!auction) return <p>Loading...</p>;
+
+  const isAuctionEnded = auction.auctionStatus === "Ended";
 
   return (
     <>
       {/* MAIN SECTION */}
-      <section className="grid grid-cols-1 m-4 md:grid-cols-3 gap-6 py-10 justify-center">
-        {/* LEFT SIDE */}
+      <section className="grid md:grid-cols-3 gap-6 p-6">
+        {/* LEFT */}
         <div className="col-span-2 bg-white rounded-2xl shadow p-6">
           <div className="flex justify-between">
             <h2 className="text-xl font-bold mb-4">{auction.title}</h2>
+
             <p className="text-gray-500">
-              Ends: {new Date(auction.time).toLocaleString()}
+              Ends in: <span className="text-red-600">{countdown}</span>
             </p>
           </div>
 
           <img
             src={auction.image}
-            alt="Auction Item"
-            className="w-full h-64 object-cover rounded-lg mb-4"
+            className="w-full h-64 object-cover rounded mt-4"
           />
 
-          <p className="text-gray-600 mb-6">{auction.description}</p>
+          <p className="mt-4 text-gray-600">{auction.description}</p>
 
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <p className="text-gray-600 text-sm">Current Highest Bid:</p>
-            <p className="text-2xl font-bold text-blue-600">
+          {/* CURRENT BID */}
+          <div className="mt-4 bg-gray-100 p-4 rounded">
+            <p>Current Bid</p>
+            <h2 className="text-2xl font-bold text-blue-600">
               ₹{auction.currentBid}
-            </p>
+            </h2>
           </div>
 
-          {/* Bid Input */}
-          <div className="flex flex-col lg:flex-row gap-3 mb-6">
+          {/* PLACE BID */}
+          <div className="flex flex-col lg:flex-row gap-3 mb-6 mt-4">
             <input
               type="number"
               value={bidAmount}
               onChange={(e) => setBidAmount(e.target.value)}
-              placeholder="Your bid amount"
               className="border rounded-lg p-2 flex-1"
+              placeholder="Enter bid"
             />
+
             <button
               onClick={handlePlaceBid}
               disabled={isAuctionEnded}
@@ -198,18 +261,18 @@ const Auction = () => {
             </button>
           </div>
 
-          {/* END AUCTION BUTTON */}
-          {storedUser?._id === auction.user &&
-            auction.auctionStatus !== "Ended" && (
+          {/* END BUTTON */}
+          {storedUser?._id ||
+            (storedUser?.id === auction.user && !isAuctionEnded && (
               <button
                 onClick={handleEndAuction}
                 className="bg-red-600 text-white px-6 py-2 rounded-lg mb-6"
               >
                 End Auction
               </button>
-            )}
+            ))}
 
-          {/* Bid History */}
+          {/* BID HISTORY */}
           <div>
             <h3 className="font-semibold mb-3 text-lg">Bid History</h3>
 
@@ -240,8 +303,8 @@ const Auction = () => {
           </div>
         </div>
 
-        {/* RIGHT SIDE CHAT */}
-        <div className="bg-white rounded-2xl shadow">
+        {/* CHAT */}
+        <div className="bg-white rounded-xl shadow">
           <Chat auctionId={auction._id} user={storedUser} />
         </div>
       </section>
@@ -331,7 +394,6 @@ const Auction = () => {
                   </div>
                 </div>
 
-                {/* RIGHT - IMAGE */}
                 <div className="border-4 border-green-500 rounded-2xl overflow-hidden h-[80vh]">
                   <img
                     src={auction.image}
@@ -380,19 +442,17 @@ const Auction = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Customer Reviews</h3>
 
-              {/* ⭐ Add Review Section */}
               <div className="mb-6 border p-4 rounded-lg bg-gray-50">
                 <h4 className="font-semibold mb-2">Add Your Review</h4>
 
-                {/* Clickable Stars */}
                 <div className="flex mb-3 text-2xl cursor-pointer">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
                       onClick={() => setRating(star)}
-                      className={`${
+                      className={
                         star <= rating ? "text-yellow-400" : "text-gray-300"
-                      }`}
+                      }
                     >
                       ★
                     </span>
@@ -414,8 +474,6 @@ const Auction = () => {
                 </button>
               </div>
 
-              {/* ⭐ Show Reviews */}
-              {/* ⭐ Show Reviews */}
               {reviews.length === 0 ? (
                 <p className="text-gray-400">No reviews yet</p>
               ) : (
@@ -425,7 +483,6 @@ const Auction = () => {
                       <li key={review._id} className="border-b pb-3">
                         <p className="font-semibold">{review.user?.username}</p>
 
-                        {/* Display Stars */}
                         <div className="text-yellow-400 text-lg">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <span key={star}>

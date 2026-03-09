@@ -6,13 +6,12 @@ import { Chat } from "../models/chat.models.js";
 export const getMessages = asyncHandler(async (req, res) => {
   const { auctionId } = req.params;
 
-  const messages = await Chat.find({ auctionId, })
+  const messages = await Chat.find({ auctionId })
     .populate("sender", "username")
     .sort({ createdAt: 1 });
 
   res.status(200).json(messages);
 });
-
 
 // 💬 Save Message (Optional API if needed)
 export const saveMessage = asyncHandler(async (req, res) => {
@@ -33,6 +32,3 @@ export const saveMessage = asyncHandler(async (req, res) => {
 
   res.status(201).json(populatedMessage);
 });
-
-
-

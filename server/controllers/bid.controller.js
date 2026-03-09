@@ -3,49 +3,46 @@ import asyncHandler from "express-async-handler";
 import { Create } from "../models/create.models.js";
 import { Bid } from "../models/bid.models.js";
 
+// place bid
 export const placeBid = asyncHandler(async (req, res) => {
   const { auctionId, amount } = req.body;
   const userId = req.user._id;
 
   const auction = await Create.findById(auctionId);
-  if (!auction) return res.status(404).json({ message: "Auction not found" });
 
-  if (auction.adminStatus !== "Approved") {
-    return res.status(403).json({ message: "Auction not approved yet" });
+  if (!auction) {
+    return res.status(404).json({ message: "Auction not found" });
   }
 
   if (auction.auctionStatus === "Ended") {
-    return res.status(400).json({ message: "Auction has ended" });
+    return res.status(400).json({ message: "Auction ended" });
   }
 
   if (amount <= auction.currentBid) {
-    return res.status(400).json({ message: "Bid must be higher than current bid" });
+    return res
+      .status(400)
+      .json({ message: "Bid must be higher than current bid" });
   }
 
-  if (new Date(auction.time) < new Date()) {
-  return res.status(400).json({ message: "Auction has ended" });
-}
-
-  // 🔥 1️⃣ Mark previous winning bid as Outbid
+  // update previous bids
   await Bid.updateMany(
     { auction: auctionId, bidStatus: "Winning" },
     { bidStatus: "Outbid" }
   );
 
-  // 🔥 2️⃣ Check if this user already has a bid for this auction
   const existingBid = await Bid.findOne({
     auction: auctionId,
     user: userId,
   });
 
+  let bid;
+
   if (existingBid) {
-    // ✅ Update existing bid instead of creating new
     existingBid.amount = amount;
     existingBid.bidStatus = "Winning";
-    await existingBid.save();
+    bid = await existingBid.save();
   } else {
-    // ✅ Create only if first time bidding
-    await Bid.create({
+    bid = await Bid.create({
       auction: auctionId,
       user: userId,
       amount,
@@ -53,12 +50,30 @@ export const placeBid = asyncHandler(async (req, res) => {
     });
   }
 
-  // 🔥 3️⃣ Update auction
   auction.currentBid = amount;
   auction.highestBidder = userId;
   await auction.save();
 
-  res.status(201).json({ success: true, message: "Bid placed successfully" });
+  // 🔥 SOCKET EMIT
+  const io = req.app.get("io");
+
+  io.to(auctionId).emit("bidPlaced", {
+    auctionId,
+    amount,
+    bidder: userId,
+  });
+
+  // update bid history
+  const bids = await Bid.find({ auction: auctionId })
+    .populate("user", "username")
+    .sort({ createdAt: -1 });
+
+  io.to(auctionId).emit("bidHistoryUpdate", bids);
+
+  res.status(201).json({
+    success: true,
+    message: "Bid placed successfully",
+  });
 });
 
 // allbids
@@ -70,7 +85,7 @@ export const getAllBids = asyncHandler(async (req, res) => {
     .populate("user", "username")
     .sort({ createdAt: -1 });
 
-  const result = auctions.map(a => ({
+  const result = auctions.map((a) => ({
     id: a._id,
     title: a.title,
     img: a.image,
@@ -83,8 +98,6 @@ export const getAllBids = asyncHandler(async (req, res) => {
 });
 
 //Mybids
-// controllers/bidController.js
-
 export const getMyBids = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
@@ -144,7 +157,6 @@ export const getMyBids = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
-
 //bid history
 export const getBidHistory = asyncHandler(async (req, res) => {
   const { auctionId } = req.params;
@@ -164,7 +176,3 @@ export const getBidHistory = asyncHandler(async (req, res) => {
     bids,
   });
 });
-
-
-
-

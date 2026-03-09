@@ -4,13 +4,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Setting = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
-const token = localStorage.getItem("token");
-
-
-// console.log("LOCAL STORAGE RAW:", localStorage.getItem("user"));
-// console.log("PARSED:", storedUser);
-// console.log("TOKEN:", token);
-
+  const token = storedUser.token || localStorage.getItem("token");
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -24,7 +18,6 @@ const token = localStorage.getItem("token");
   const [profileVisibility, setProfileVisibility] = useState("public");
   const [dataSharing, setDataSharing] = useState(false);
 
-  // const token = storedUser.token;
   // FETCH SETTINGS
  useEffect(() => {
   if (!token) return;

@@ -162,7 +162,7 @@ const Create = () => {
             placeholder="Enter description"
             required
             rows="3"
-            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-green-200"
+            className="w-full border resize-none border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-green-200"
           ></textarea>
         </div>
 

@@ -90,6 +90,10 @@ const createSchema = new Schema(
       type: String,
       default: "",
     },
+    soldOut: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

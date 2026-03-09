@@ -55,18 +55,49 @@ const Sidebar = () => {
 
   const menuItems = [
     ...(isAdmin
-      ? [{ id: "admin", label: "Admin", icon: <CircleUserRound size={18} />, path: "/admin" }]
+      ? [
+          {
+            id: "admin",
+            label: "Admin",
+            icon: <CircleUserRound size={18} />,
+            path: "/admin",
+          },
+        ]
       : []),
 
-    { id: "user", label: "My Profile", icon: <HiOutlineUserGroup size={18} />, path: "/user" },
-    { id: "myauction", label: "My Auction", icon: <ImHammer2  size={18} />, path: "/my-auctions" },
-    { id: "allbids", label: "All Bids", icon: <History size={18} />, path: "/all_Bids" },
-    { id: "messages", label: "Messages", icon: <MessageSquare size={18} />, path: "/message" },
+    {
+      id: "user",
+      label: "My Profile",
+      icon: <HiOutlineUserGroup size={18} />,
+      path: "/user",
+    },
+    {
+      id: "myauction",
+      label: "My Auction",
+      icon: <ImHammer2 size={18} />,
+      path: "/my-auctions",
+    },
+    {
+      id: "allbids",
+      label: "All Bids",
+      icon: <History size={18} />,
+      path: "/all_Bids",
+    },
+    {
+      id: "messages",
+      label: "Messages",
+      icon: <MessageSquare size={18} />,
+      path: "/message",
+    },
   ];
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_AUTH_URL}/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${import.meta.env.VITE_AUTH_URL}/logout`,
+        {},
+        { withCredentials: true },
+      );
     } catch (e) {}
 
     dispatch(logoutUser());
@@ -75,7 +106,6 @@ const Sidebar = () => {
 
   return (
     <aside className="flex flex-col md:w-64 bg-customGreen1 text-customGreen7 font-[font4] justify-between md:fixed md:left-0 md:top-0 fixed bottom-0 w-full h-16 md:h-screen z-50">
-
       {/* Desktop */}
       <div className="hidden md:flex flex-col justify-between h-full">
         <div>
@@ -85,7 +115,7 @@ const Sidebar = () => {
           </div>
 
           <nav className="flex flex-col gap-2 px-4">
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <NavLink
                 key={item.id}
                 to={item.path}
@@ -101,7 +131,9 @@ const Sidebar = () => {
               to="/create"
               className={({ isActive }) =>
                 `flex w-44 m-4 py-2 px-4 rounded-lg justify-between mt-6 ${
-                  isActive ? "bg-customGreen2" : "hover:text-customGreen6 bg-customGreen3"
+                  isActive
+                    ? "bg-customGreen2"
+                    : "hover:text-customGreen6 bg-customGreen3"
                 }`
               }
             >
@@ -113,7 +145,6 @@ const Sidebar = () => {
 
         {/* USER CARD */}
         <div className="relative p-4 border-t-2 border-customGreen6 flex items-center gap-3">
-          
           <div onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
             {renderAvatar("w-10 h-10")}
           </div>
@@ -141,7 +172,6 @@ const Sidebar = () => {
       {/*              MOBILE BOTTOM NAV                  */}
       {/* ------------------------------------------------ */}
       <div className="md:hidden flex justify-around items-center bg-customGreen1 h-16 relative">
-
         {menuItems.map((item) => (
           <NavLink
             key={item.id}
@@ -179,7 +209,6 @@ const Sidebar = () => {
             {renderAvatar("w-8 h-8")}
           </div>
           Profile
-
           {isDropdownOpen && (
             <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg p-3 w-40">
               <p className="text-gray-700 font-medium">{user?.fullname}</p>
@@ -193,7 +222,6 @@ const Sidebar = () => {
           )}
         </div>
       </div>
-
     </aside>
   );
 };

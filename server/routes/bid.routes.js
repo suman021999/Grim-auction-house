@@ -5,13 +5,16 @@ import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-//api/v1/bid/getallbids
+// Get all bids for an auction
 router.route("/getallbids").get(getAllBids);
-//api/v1/bid/placebid
+
+// Place a bid
 router.route("/placebid").post(authMiddleware, placeBid);
-//api/v1/bid/getmybids
+
+// Get my bids
 router.route("/getmybids").get(authMiddleware, getMyBids);
-//api/v1/bid/gethistroy
+
+// Get bid history for an auction
 router.route("/history/:auctionId").get(getBidHistory);
 
 

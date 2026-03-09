@@ -1,11 +1,11 @@
 import React from "react";
 import RollingGallery from "../../../common/RollingGallery";
-import aboutImg from "../../../../public/backgrounds/about.png";
+import aboutImg from "/backgrounds/about.png";
 
 const About = () => {
   return (
     <section
-    id="about" 
+      id="about"
       className="bg-midBg py-4 md:py-16 lg:py-20 m-10 rounded-3xl shadowBox  "
       style={{
         backgroundImage: `linear-gradient(rgba(80,111,54,0.8), rgba(80,111,54,0.8)), url(${aboutImg})`,

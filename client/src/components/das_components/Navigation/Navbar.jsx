@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import logo from "../../../../public/logos/logo.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -31,8 +31,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
