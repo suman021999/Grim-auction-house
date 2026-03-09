@@ -85,7 +85,7 @@ export const getAllBids = asyncHandler(async (req, res) => {
     .populate("user", "username")
     .sort({ createdAt: -1 });
 
-  const result = auctions.map((a) => ({
+  const result = auctions.map(a => ({
     id: a._id,
     title: a.title,
     img: a.image,
@@ -98,6 +98,8 @@ export const getAllBids = asyncHandler(async (req, res) => {
 });
 
 //Mybids
+// controllers/bidController.js
+
 export const getMyBids = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
@@ -157,6 +159,7 @@ export const getMyBids = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
+
 //bid history
 export const getBidHistory = asyncHandler(async (req, res) => {
   const { auctionId } = req.params;
@@ -176,3 +179,7 @@ export const getBidHistory = asyncHandler(async (req, res) => {
     bids,
   });
 });
+
+
+
+
