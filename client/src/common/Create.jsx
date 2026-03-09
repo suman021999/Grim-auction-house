@@ -38,8 +38,7 @@ const Create = () => {
     });
 
     return () => {
-      socket.off("auctionCreated");
-      socket.off("timeUpdate");
+      socket.disconnect();
     };
   }, []);
 
