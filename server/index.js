@@ -55,7 +55,7 @@ const io = new Server(server, {
       "http://localhost:5173",
       "https://grim-auction-house-ph6a.vercel.app",
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","PUT", "DELETE"],
     credentials: true,
   },
 });

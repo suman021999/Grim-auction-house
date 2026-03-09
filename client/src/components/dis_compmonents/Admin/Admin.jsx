@@ -16,38 +16,37 @@ export default function Admin() {
   // ✅ FIXED — USE AUTH PATH DIRECTLY
   const API = import.meta.env.VITE_AUCTION_URL;
 
- useEffect(() => {
-  const handleAuctionCreated = (auction) => {
-    console.log("Auction event received:", auction);
-
-    // 🔥 instantly update review list without refresh
-    setData((prev) => ({
-      ...prev,
-      review: [
-        {
-          id: auction._id,
-          username: auction.user?.username || "Unknown",
-          image: auction.image,
-          name: auction.title,
-          bid: auction.amountBid,
-          currentBid: auction.currentBid,
-          status: "Pending",
-        },
-        ...prev.review,
-      ],
-    }));
-  };
+useEffect(() => {
+  console.log("Socket connected:", socket.connected);
 
   socket.on("connect", () => {
     console.log("Admin socket connected:", socket.id);
   });
 
-  socket.on("auctionCreated", handleAuctionCreated);
-
   loadDashboard();
 
+  // NEW AUCTION
+  socket.on("auctionCreated", () => {
+    console.log("Auction created event");
+    loadDashboard();
+  });
+
+  // BID UPDATE
+  socket.on("bidUpdated", () => {
+    console.log("Bid updated event");
+    loadDashboard();
+  });
+
+  // AUCTION END
+  socket.on("auctionEnded", () => {
+    console.log("Auction ended event");
+    loadDashboard();
+  });
+
   return () => {
-    socket.off("auctionCreated", handleAuctionCreated);
+    socket.off("auctionCreated");
+    socket.off("bidUpdated");
+    socket.off("auctionEnded");
   };
 }, []);
 
