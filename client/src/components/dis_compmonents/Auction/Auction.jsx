@@ -41,43 +41,39 @@ const Auction = () => {
   ========================= */
 
   useEffect(() => {
-  if (!auction?._id) return;
+    if (!auction?._id) return;
 
-  socket.emit("joinAuction", auction._id);
+    socket.emit("joinAuction", auction._id);
 
-  const handleBidPlaced = (data) => {
-    if (data.auctionId === auction._id) {
-      setAuction((prev) => ({
-        ...prev,
-        currentBid: data.amount,
-      }));
-    }
-  };
+    socket.on("bidPlaced", (data) => {
+      if (data.auctionId === auction._id) {
+        setAuction((prev) => ({
+          ...prev,
+          currentBid: data.amount,
+        }));
+      }
+    });
 
-  const handleBidHistory = (data) => {
-    setBids(data);
-  };
+    socket.on("bidHistoryUpdate", (data) => {
+      setBids(data);
+    });
 
-  const handleAuctionEnded = (data) => {
-    if (data.auctionId === auction._id) {
-      setAuction((prev) => ({
-        ...prev,
-        auctionStatus: "Ended",
-        soldOut: true,
-      }));
-    }
-  };
+    socket.on("auctionEnded", (data) => {
+      if (data.auctionId === auction._id) {
+        setAuction((prev) => ({
+          ...prev,
+          auctionStatus: "Ended",
+          soldOut: true,
+        }));
+      }
+    });
 
-  socket.on("bidPlaced", handleBidPlaced);
-  socket.on("bidHistoryUpdate", handleBidHistory);
-  socket.on("auctionEnded", handleAuctionEnded);
-
-  return () => {
-    socket.off("bidPlaced", handleBidPlaced);
-    socket.off("bidHistoryUpdate", handleBidHistory);
-    socket.off("auctionEnded", handleAuctionEnded);
-  };
-}, [auction?._id]);
+    return () => {
+      socket.off("bidPlaced");
+      socket.off("bidHistoryUpdate");
+      socket.off("auctionEnded");
+    };
+  }, [auction]);
 
   /* =========================
       FETCH BID HISTORY

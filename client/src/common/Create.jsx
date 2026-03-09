@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { socket } from "../../common/socket";
+import { socket } from "./socket";
 import toast from "react-hot-toast";
 
 const Create = () => {
