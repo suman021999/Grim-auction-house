@@ -4,9 +4,7 @@ import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
-
 import database from "./db/database.js";
-
 import userRouter from "./routes/user.routes.js";
 import auctionRouter from "./routes/auction.routes.js";
 import bidRouter from "./routes/bid.routes.js";
@@ -14,7 +12,6 @@ import reviewRoutes from "./routes/review.routes.js";
 import chatRoutes from "./routes/chat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import settingsRoutes from "./routes/setting.routes.js";
-
 import { Chat } from "./models/chat.models.js";
 
 // Load environment variables
@@ -32,7 +29,7 @@ const server = createServer(app);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://grim-auction-house.vercel.app",
+  "https://grim-auction-house-ph6a.vercel.app",
 ];
 
 const corsOptions = {
