@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Send, Search, Menu, X, Users } from "lucide-react";
+import socket from "../../../common/socket";
 
 const Message = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -10,14 +11,14 @@ const Message = () => {
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
 
-  // ✅ search state
   const [search, setSearch] = useState("");
 
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
   const BASE_MESSAGE_URL = import.meta.env.VITE_MESSAGE_URL;
 
-  // ✅ Load Conversations
+  /* ---------------- LOAD CONVERSATIONS ---------------- */
+
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -38,7 +39,8 @@ const Message = () => {
     fetchConversations();
   }, []);
 
-  // ✅ Load Messages
+  /* ---------------- LOAD MESSAGES ---------------- */
+
   useEffect(() => {
     if (!activeConversation) return;
 
@@ -50,7 +52,7 @@ const Message = () => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          },
+          }
         );
 
         setMessages(res.data);
@@ -60,9 +62,23 @@ const Message = () => {
     };
 
     fetchMessages();
+
+    /* join socket room */
+    socket.emit("joinConversation", activeConversation._id);
   }, [activeConversation]);
 
-  // ✅ Send Message
+  /* ---------------- RECEIVE REALTIME MESSAGE ---------------- */
+
+  useEffect(() => {
+    socket.on("newMessage", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => socket.off("newMessage");
+  }, []);
+
+  /* ---------------- SEND MESSAGE ---------------- */
+
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -83,11 +99,15 @@ const Message = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        },
+        }
       );
 
-      setMessages([...messages, res.data]);
+      setMessages((prev) => [...prev, res.data]);
+
       setNewMessage("");
+
+      /* emit realtime message */
+      socket.emit("sendMessage", res.data);
     } catch (err) {
       console.log(err);
     }
@@ -100,7 +120,8 @@ const Message = () => {
     }
   };
 
-  // ✅ Filter conversations
+  /* ---------------- SEARCH ---------------- */
+
   const filteredConversations = conversations.filter((c) => {
     const otherUser = storedUser._id === c.buyer._id ? c.seller : c.buyer;
 
@@ -110,9 +131,12 @@ const Message = () => {
     );
   });
 
+  /* ---------------- UI ---------------- */
+
   return (
-    <div className="flex h-screen bg-gray-50 ">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-gray-50">
+      {/* SIDEBAR */}
+
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -120,7 +144,6 @@ const Message = () => {
            bg-white border-r border-gray-200 flex flex-col z-20 
            transform transition-transform duration-300`}
       >
-        {/* Header */}
         <div className="p-4 border-b border-gray-100 flex justify-between items-center">
           <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
 
@@ -132,7 +155,8 @@ const Message = () => {
           </button>
         </div>
 
-        {/* Search */}
+        {/* SEARCH */}
+
         <div className="p-4 border-b border-gray-100">
           <div className="relative">
             <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -147,7 +171,8 @@ const Message = () => {
           </div>
         </div>
 
-        {/* Conversations */}
+        {/* CONVERSATIONS */}
+
         <div className="flex-1 overflow-y-auto space-y-3 p-3">
           {filteredConversations.map((c) => {
             const otherUser =
@@ -157,115 +182,81 @@ const Message = () => {
               <div
                 key={c._id}
                 onClick={() => setActiveConversation(c)}
-                className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 ${
                   activeConversation?._id === c._id
                     ? "bg-blue-50 border-l-4 border-l-blue-500"
                     : ""
                 }`}
               >
-                <div className="flex items-start space-x-3">
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg">
-                    💬
-                  </div>
+                <h3 className="font-medium text-gray-900">
+                  {c.auctionId?.title}
+                </h3>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between mb-1">
-                      <h3 className="font-medium text-gray-900 truncate">
-                        {c.auctionId?.title}
-                      </h3>
-
-                      <span className="text-xs text-gray-500">
-                        {new Date(c.createdAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-gray-600 truncate">
-                      Chat with {otherUser.username}
-                    </p>
-                  </div>
-                </div>
+                <p className="text-sm text-gray-600">
+                  Chat with {otherUser.username}
+                </p>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Chat Section */}
+      {/* CHAT */}
+
       <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+        {/* HEADER */}
+
+        <div className="bg-white border-b border-gray-200 p-4 flex justify-between">
           {activeConversation && (
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-600" />
-              </div>
-
-              <div>
-                <h2 className="font-semibold text-gray-900">
-                  {activeConversation.auctionId?.title}
-                </h2>
-
-                <p className="text-sm text-gray-500">Auction Chat</p>
-              </div>
-            </div>
+            <h2 className="font-semibold text-gray-900">
+              {activeConversation.auctionId?.title}
+            </h2>
           )}
-
-          <button
-            className="md:hidden text-gray-600"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
         </div>
 
-        {/* Messages */}
+        {/* MESSAGES */}
+
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((m) => (
-            <div
-              key={m._id}
-              className={`flex ${
-                m.sender === storedUser._id || m.sender?._id === storedUser._id
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-            >
-              <div
-                className={`px-4 py-2 rounded-2xl max-w-[80%] sm:max-w-md ${
-                  m.sender === storedUser._id ||
-                  m.sender?._id === storedUser._id
-                    ? "bg-blue-500 text-white rounded-br-md"
-                    : "bg-gray-100 text-gray-900 rounded-bl-md"
-                }`}
-              >
-                {m.text}
-              </div>
+          {messages.map((m) => {
+            const senderId =
+              typeof m.sender === "object" ? m.sender._id : m.sender;
 
-              <span className="text-xs text-gray-400 ml-2 self-end">
-                {new Date(m.createdAt).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-          ))}
+            const isMe = senderId === storedUser._id;
+
+            return (
+              <div
+                key={m._id}
+                className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`px-4 py-2 rounded-2xl max-w-md ${
+                    isMe
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
+                >
+                  {m.text}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Input */}
-        <div className="bg-white border-t border-gray-200 p-4 mb-20 sm:mb-18 md:mb-0">
+        {/* INPUT */}
+
+        <div className="bg-white border-t p-4">
           <div className="flex items-end space-x-2">
             <textarea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-1 px-3 py-2 border border-gray-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows="1"
+              placeholder="Type message..."
+              className="flex-1 px-3 py-2 border rounded-xl"
             />
 
             <button
               onClick={handleSendMessage}
-              disabled={!newMessage.trim()}
-              className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 disabled:bg-gray-300"
+              className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center"
             >
               <Send className="w-5 h-5" />
             </button>
