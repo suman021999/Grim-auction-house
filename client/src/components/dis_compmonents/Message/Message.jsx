@@ -529,7 +529,7 @@ const Message = () => {
 
         {/* INPUT */}
 
-        <div className="bg-white border-t p-4">
+         <div className="bg-white border-t border-gray-200 p-4 mb-20 sm:mb-18 md:mb-0">
           <div className="flex items-end space-x-2">
           
 
