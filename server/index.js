@@ -24,19 +24,32 @@ const app = express();
 const server = createServer(app);
 
 // CORS Configuration
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://grim-auction-house.vercel.app"
+];
+
 const corsOptions = {
-  origin: [
-    process.env.FRONTEND_URL || "http://localhost:5173",
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-  optionsSuccessStatus: 200,
+  credentials: true
 };
+
+app.use(cors(corsOptions));
 
 // Socket.IO Configuration
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://grim-auction-house.vercel.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
   }
