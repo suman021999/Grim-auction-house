@@ -57,7 +57,15 @@ export const placeBid = asyncHandler(async (req, res) => {
   // 🔥 SOCKET EMIT
   const io = req.app.get("io");
 
+  // Send to auction room for participants
   io.to(auctionId).emit("bidPlaced", {
+    auctionId,
+    amount,
+    bidder: userId,
+  });
+
+  // Send to admin dashboard
+  io.emit("bidUpdated", {
     auctionId,
     amount,
     bidder: userId,
@@ -85,7 +93,7 @@ export const getAllBids = asyncHandler(async (req, res) => {
     .populate("user", "username")
     .sort({ createdAt: -1 });
 
-  const result = auctions.map(a => ({
+  const result = auctions.map((a) => ({
     id: a._id,
     title: a.title,
     img: a.image,
@@ -159,7 +167,6 @@ export const getMyBids = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
-
 //bid history
 export const getBidHistory = asyncHandler(async (req, res) => {
   const { auctionId } = req.params;
@@ -179,7 +186,3 @@ export const getBidHistory = asyncHandler(async (req, res) => {
     bids,
   });
 });
-
-
-
-
