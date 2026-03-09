@@ -237,6 +237,68 @@ export const getMyAuctions = async (req, res) => {
 };
 
 // ✔ End Auction
+// export const endAuction = asyncHandler(async (req, res) => {
+//   const { id } = req.params;
+
+//   const auction = await Create.findById(id);
+
+//   if (!auction) {
+//     return res.status(404).json({ message: "Auction not found" });
+//   }
+
+//   auction.auctionStatus = "Ended";
+//   auction.soldOut = true;
+
+//   await auction.save();
+
+//   const highestBid = await Bid.findOne({ auction: id })
+//     .sort({ amount: -1 })
+//     .populate("user");
+
+//   let conversation = null;
+
+//   if (highestBid) {
+//     conversation = await Conversation.findOne({
+//       auctionId: auction._id,
+//       buyer: highestBid.user._id,
+//       seller: auction.user,
+//     });
+
+//     if (!conversation) {
+//       conversation = await Conversation.create({
+//         auctionId: auction._id,
+//         buyer: highestBid.user._id,
+//         seller: auction.user,
+//       });
+//     }
+//   }
+
+//   // 🔥 SOCKET EVENT
+//   const io = req.app.get("io");
+
+//   io.to(id).emit("auctionEnded", {
+//     auctionId: id,
+//     soldOut: true,
+//     winner: highestBid?.user,
+//   });
+
+//   if (conversation) {
+//     io.to(highestBid.user._id.toString()).emit(
+//       "conversationCreated",
+//       conversation
+//     );
+
+//     io.to(auction.user.toString()).emit("conversationCreated", conversation);
+//   }
+
+//   res.json({
+//     success: true,
+//     message: "Auction ended",
+//   });
+// });
+
+
+
 export const endAuction = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -246,24 +308,35 @@ export const endAuction = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "Auction not found" });
   }
 
+  // ✅ Prevent ending twice
+  if (auction.auctionStatus === "Ended") {
+    return res.status(400).json({
+      success: false,
+      message: "Auction already ended",
+    });
+  }
+
+  // ✅ End auction
   auction.auctionStatus = "Ended";
   auction.soldOut = true;
 
   await auction.save();
 
+  // ✅ Find highest bid
   const highestBid = await Bid.findOne({ auction: id })
     .sort({ amount: -1 })
     .populate("user");
 
   let conversation = null;
 
-  if (highestBid) {
+  if (highestBid && highestBid.user) {
     conversation = await Conversation.findOne({
       auctionId: auction._id,
       buyer: highestBid.user._id,
       seller: auction.user,
     });
 
+    // ✅ Create conversation if not exists
     if (!conversation) {
       conversation = await Conversation.create({
         auctionId: auction._id,
@@ -273,26 +346,32 @@ export const endAuction = asyncHandler(async (req, res) => {
     }
   }
 
-  // 🔥 SOCKET EVENT
+  // ✅ SOCKET EVENTS
   const io = req.app.get("io");
 
-  io.to(id).emit("auctionEnded", {
-    auctionId: id,
-    soldOut: true,
-    winner: highestBid?.user,
-  });
+  if (io) {
+    io.to(id).emit("auctionEnded", {
+      auctionId: id,
+      soldOut: true,
+      winner: highestBid?.user || null,
+    });
 
-  if (conversation) {
-    io.to(highestBid.user._id.toString()).emit(
-      "conversationCreated",
-      conversation
-    );
+    if (conversation) {
+      io.to(highestBid.user._id.toString()).emit(
+        "conversationCreated",
+        conversation
+      );
 
-    io.to(auction.user.toString()).emit("conversationCreated", conversation);
+      io.to(auction.user.toString()).emit(
+        "conversationCreated",
+        conversation
+      );
+    }
   }
 
   res.json({
     success: true,
-    message: "Auction ended",
+    message: "Auction ended successfully",
+    winner: highestBid?.user || null,
   });
 });
