@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Send, Search, Menu, X, Users } from "lucide-react";
-import socket from "../../../common/socket";
+import {socket} from "../../../common/socket";
 
 const Message = () => {
   const [newMessage, setNewMessage] = useState("");
