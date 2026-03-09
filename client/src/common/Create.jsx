@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { io } from "socket.io-client";
+import { socket } from "../../common/socket";
 import toast from "react-hot-toast";
 
 const Create = () => {
@@ -18,39 +18,25 @@ const Create = () => {
     image: null,
   });
 
-  const [socket, setSocket] = useState(null);
-
-  // ---------------------------
-  // ✅ SOCKET.IO CONNECTION
-  // ---------------------------
+  // ✅ Listen for socket events (optional)
   useEffect(() => {
-    const s = io("http://localhost:8000", {
-      transports: ["websocket"],
-      withCredentials: true,
+    socket.on("connect", () => {
+      console.log("SOCKET CONNECTED:", socket.id);
     });
 
-    setSocket(s);
-
-    s.on("connect", () => {
-      console.log("SOCKET CONNECTED:", s.id);
+    socket.on("auctionCreated", (auction) => {
+      console.log("Auction Created:", auction);
     });
 
-    s.on("auctionCreated", (auction) => {
-      console.log("Auction Created (socket event):", auction);
-    });
-
-    s.on("timeUpdate", (data) => {
+    socket.on("timeUpdate", (data) => {
       console.log("Countdown:", data);
     });
 
     return () => {
-      s.disconnect();
+      socket.off("auctionCreated");
+      socket.off("timeUpdate");
     };
   }, []);
-
-  // ---------------------------
-  // FORM HANDLERS
-  // ---------------------------
 
   const categories = [
     "Historical",
@@ -65,56 +51,52 @@ const Create = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
     }));
   };
 
-  // ---------------------------
-  // ✅ FINAL WORKING SUBMIT WITH AXIOS + TOKEN
-  // ---------------------------
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const form = new FormData();
+    try {
+      const form = new FormData();
 
-    // ✅ Convert selected local time to UTC
-    const utcTime = new Date(formData.time).toISOString();
+      const utcTime = new Date(formData.time).toISOString();
 
-    // ✅ Append all fields
-    Object.keys(formData).forEach((key) => {
-      if (key === "time") {
-        form.append("time", utcTime); // use converted time
-      } else {
-        form.append(key, formData[key]);
-      }
-    });
+      Object.keys(formData).forEach((key) => {
+        if (key === "time") {
+          form.append("time", utcTime);
+        } else {
+          form.append(key, formData[key]);
+        }
+      });
 
-    const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-    const res = await axios.post(
-      `${import.meta.env.VITE_AUCTION_URL}/create`,
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      }
-    );
+      const res = await axios.post(
+        `${import.meta.env.VITE_AUCTION_URL}/create`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
 
-    console.log("Server response:", res.data);
+      console.log("Server response:", res.data);
 
-    toast.success("Product created successfully!");
+      toast.success("Product created successfully!");
 
-  } catch (err) {
-    console.error(err);
-    toast.error("Something went wrong");
-  }
-};
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
+  };
 
   // ----------------------------------------------------------
   // NOTE: BELOW THIS LINE YOUR UI IS 100% EXACTLY SAME
