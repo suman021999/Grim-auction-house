@@ -47,10 +47,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
-
-
 /* -------------------- SOCKET.IO -------------------- */
 
 const io = new Server(server, {
@@ -59,10 +55,8 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
+  transports: ["websocket", "polling"],
 });
-
-// make socket available in controllers
-app.set("io", io);
 
 
 
