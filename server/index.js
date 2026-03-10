@@ -21,10 +21,6 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
-
-
-
-
 /* -------------------- CORS CONFIG -------------------- */
 
 const allowedOrigins = [
@@ -50,36 +46,26 @@ app.use(cors(corsOptions));
 /* -------------------- SOCKET.IO -------------------- */
 
 const io = new Server(server, {
+  transports: ["websocket"],
   cors: {
     origin: [
       "http://localhost:5173",
       "https://grim-auction-house-ph6a.vercel.app",
     ],
-    methods: ["GET", "POST","PUT", "DELETE"],
+    methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
-
-
-
+app.set("io", io);
 /* -------------------- DATABASE -------------------- */
 
 database();
-
-
-
-
 
 /* -------------------- MIDDLEWARE -------------------- */
 
 app.use(cookieParser());
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true, limit: "100mb" }));
-
-
-
-
 
 /* -------------------- ROUTES -------------------- */
 
@@ -90,10 +76,6 @@ app.use("/api/v1/review", reviewRoutes);
 app.use("/api/v1/message", messageRoutes);
 app.use("/api/v1/setting", settingsRoutes);
 app.use("/api/v1/chat", chatRoutes);
-
-
-
-
 
 /* -------------------- SOCKET CONNECTION -------------------- */
 
@@ -113,10 +95,6 @@ io.on("connection", (socket) => {
     socket.join(conversationId);
     console.log(`User joined conversation: ${conversationId}`);
   });
-
-
-
-
 
   /* -------- AUCTION CHAT MESSAGE -------- */
 
@@ -141,22 +119,14 @@ io.on("connection", (socket) => {
     }
   });
 
-
-
-
-
   socket.on("disconnect", () => {
     console.log("❌ Client disconnected:", socket.id);
   });
 });
 
-
-
-
-
 /* -------------------- SERVER START -------------------- */
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT 
 
 server.listen(port, () => {
   console.log(`🚀 Server running on port ${port}`);

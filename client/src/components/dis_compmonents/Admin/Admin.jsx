@@ -20,39 +20,41 @@ export default function Admin() {
   const API = import.meta.env.VITE_AUCTION_URL;
 
 
-  useEffect(() => {
+useEffect(() => {
 
-    if (!socket.connected) {
-      socket.connect();
-    }
+  loadDashboard(); // ✅ ALWAYS LOAD DATA ON PAGE OPEN
 
-    socket.on("connect", () => {
-      console.log("Admin socket connected:", socket.id);
-      loadDashboard();
-    });
+  if (!socket.connected) {
+    socket.connect();
+  }
 
-    socket.on("auctionCreated", (auction) => {
-      console.log("New auction created:", auction);
-      loadDashboard();
-    });
+  socket.on("connect", () => {
+    console.log("Admin socket connected:", socket.id);
+  });
 
-    socket.on("bidUpdated", (data) => {
-      console.log("Bid updated:", data);
-      loadDashboard();
-    });
+  socket.on("auctionCreated", (auction) => {
+    console.log("New auction created:", auction);
+    loadDashboard();
+  });
 
-    socket.on("auctionEnded", (auctionId) => {
-      console.log("Auction ended:", auctionId);
-      loadDashboard();
-    });
+  socket.on("bidUpdated", (data) => {
+    console.log("Bid updated:", data);
+    loadDashboard();
+  });
 
-    return () => {
-      socket.off("auctionCreated");
-      socket.off("bidUpdated");
-      socket.off("auctionEnded");
-    };
+  socket.on("auctionEnded", (auctionId) => {
+    console.log("Auction ended:", auctionId);
+    loadDashboard();
+  });
 
-  }, []);
+  return () => {
+    socket.off("connect");
+    socket.off("auctionCreated");
+    socket.off("bidUpdated");
+    socket.off("auctionEnded");
+  };
+
+}, []);
 
 
   async function loadDashboard() {

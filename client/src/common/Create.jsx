@@ -26,7 +26,7 @@ const Create = () => {
   useEffect(() => {
   
     socket.on("connect", () => {
-      console.log("SOCKET CONNECTED:", s.id);
+      console.log("SOCKET CONNECTED:", socket.id);
     });
 
     socket.on("auctionCreated", (auction) => {
@@ -38,7 +38,8 @@ const Create = () => {
     });
 
     return () => {
-      socket.disconnect();
+      socket.off("auctionCreated");
+      socket.off("timeUpdate");
     };
   }, []);
 

@@ -67,6 +67,8 @@ export const createAuction = asyncHandler(async (req, res) => {
 
     // socket instance
     const io = req.app.get("io");
+    
+    // console.log("IO instance:", !!io);
 
     if (io) {
       // broadcast new auction
