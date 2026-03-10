@@ -4,25 +4,6 @@ import { Conversation } from "../models/conversation.model.js";
 import { Message } from "../models/message.modals.js";
 
 // ✅ Send Message
-// export const sendMessage = async (req, res) => {
-//   try {
-//     const { conversationId, receiver, text } = req.body;
-
-//     const message = await Message.create({
-//       conversationId,
-//       sender: req.user._id,
-//       receiver,
-//       text,
-//     });
-
-//     res.status(201).json(message);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// controllers/message.controller.js
-
 export const sendMessage = async (req, res) => {
   try {
     const { conversationId, receiver, text } = req.body;

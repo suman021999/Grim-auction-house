@@ -1,8 +1,8 @@
-//message.jsx
+// message.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Send, Search, Menu, X, Users } from "lucide-react";
-import {socket} from "../../../common/socket";
+import { socket } from "../../../common/socket";
 
 const Message = () => {
   const [newMessage, setNewMessage] = useState("");
@@ -14,7 +14,10 @@ const Message = () => {
 
   const [search, setSearch] = useState("");
 
+  // const storedUser = JSON.parse(localStorage.getItem("user"));
+
   const storedUser = JSON.parse(localStorage.getItem("user"));
+  const currentUserId = String(storedUser?._id || storedUser?.id || "");
 
   const BASE_MESSAGE_URL = import.meta.env.VITE_MESSAGE_URL;
 
@@ -53,7 +56,7 @@ const Message = () => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
 
         setMessages(res.data);
@@ -64,7 +67,6 @@ const Message = () => {
 
     fetchMessages();
 
-    /* join socket room */
     socket.emit("joinConversation", activeConversation._id);
   }, [activeConversation]);
 
@@ -72,7 +74,11 @@ const Message = () => {
 
   useEffect(() => {
     socket.on("newMessage", (msg) => {
-      setMessages((prev) => [...prev, msg]);
+      setMessages((prev) => {
+        const exists = prev.some((m) => m._id === msg._id);
+        if (exists) return prev;
+        return [...prev, msg];
+      });
     });
 
     return () => socket.off("newMessage");
@@ -84,10 +90,13 @@ const Message = () => {
     if (!newMessage.trim()) return;
 
     try {
+      const buyerId = String(
+        activeConversation.buyer?._id || activeConversation.buyer?.id,
+      );
       const receiver =
-        storedUser._id === activeConversation.buyer._id
-          ? activeConversation.seller._id
-          : activeConversation.buyer._id;
+        currentUserId === buyerId
+          ? activeConversation.seller?._id || activeConversation.seller?.id
+          : activeConversation.buyer?._id || activeConversation.buyer?.id;
 
       const res = await axios.post(
         `${BASE_MESSAGE_URL}`,
@@ -100,15 +109,12 @@ const Message = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
-      setMessages((prev) => [...prev, res.data]);
+      socket.emit("sendMessage", res.data);
 
       setNewMessage("");
-
-      /* emit realtime message */
-      socket.emit("sendMessage", res.data);
     } catch (err) {
       console.log(err);
     }
@@ -139,11 +145,10 @@ const Message = () => {
       {/* SIDEBAR */}
 
       <div
-        className={`${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed md:relative md:translate-x-0 top-0 left-0 h-full w-72 sm:w-64 
-           bg-white border-r border-gray-200 flex flex-col z-20 
-           transform transition-transform duration-300`}
+        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        fixed md:relative md:translate-x-0 top-0 left-0 h-full w-72 sm:w-64
+        bg-white border-r border-gray-200 flex flex-col z-20
+        transform transition-transform duration-300`}
       >
         <div className="p-4 border-b border-gray-100 flex justify-between items-center">
           <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
@@ -182,20 +187,31 @@ const Message = () => {
             return (
               <div
                 key={c._id}
-                onClick={() => setActiveConversation(c)}
-                className={`p-4 border rounded-lg cursor-pointer hover:bg-gray-50 ${
+                onClick={() => {
+                  setActiveConversation(c);
+                  setSidebarOpen(false);
+                }}
+                className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${
                   activeConversation?._id === c._id
                     ? "bg-blue-50 border-l-4 border-l-blue-500"
                     : ""
                 }`}
               >
-                <h3 className="font-medium text-gray-900">
-                  {c.auctionId?.title}
-                </h3>
+                {/* CHAT AVATAR */}
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg">
+                  💬
+                </div>
 
-                <p className="text-sm text-gray-600">
-                  Chat with {otherUser.username}
-                </p>
+                {/* CONVERSATION TEXT */}
+                <div className="flex flex-col">
+                  <h3 className="font-medium text-gray-900">
+                    {c.auctionId?.title}
+                  </h3>
+
+                  <p className="text-sm text-gray-600">
+                    Chat with {otherUser.username}
+                  </p>
+                </div>
               </div>
             );
           })}
@@ -207,12 +223,28 @@ const Message = () => {
       <div className="flex-1 flex flex-col">
         {/* HEADER */}
 
-        <div className="bg-white border-b border-gray-200 p-4 flex justify-between">
-          {activeConversation && (
-            <h2 className="font-semibold text-gray-900">
-              {activeConversation.auctionId?.title}
-            </h2>
-          )}
+        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* MENU BUTTON */}
+            <button
+              className="md:hidden text-gray-600"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+
+            {/* AVATAR */}
+            <div className="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-sm">
+              <Users className="w-5 h-5 text-blue-500" />
+            </div>
+
+            {/* TITLE */}
+            {activeConversation && (
+              <h2 className="font-semibold text-gray-900 text-sm sm:text-base">
+                {activeConversation.auctionId?.title}
+              </h2>
+            )}
+          </div>
         </div>
 
         {/* MESSAGES */}
@@ -220,9 +252,10 @@ const Message = () => {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((m) => {
             const senderId =
-              typeof m.sender === "object" ? m.sender._id : m.sender;
-
-            const isMe = senderId === storedUser._id;
+              typeof m.sender === "object"
+                ? m.sender._id || m.sender.id
+                : m.sender;
+            const isMe = currentUserId && String(senderId) === currentUserId;
 
             return (
               <div
@@ -245,14 +278,9 @@ const Message = () => {
 
         {/* INPUT */}
 
-         <div className="bg-white border-t border-gray-200 p-4 mb-20 sm:mb-18 md:mb-0">
+        <div className="bg-white border-t border-gray-200 p-4 mb-20 sm:mb-18 md:mb-0">
           <div className="flex items-end space-x-2">
-          
-
-
-
             <textarea
-              id="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -263,7 +291,7 @@ const Message = () => {
 
             <button
               onClick={handleSendMessage}
-              className="w-10 h-10 bg-blue-500  text-white rounded-full flex items-center justify-center"
+              className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center"
             >
               <Send className="w-5 h-5" />
             </button>

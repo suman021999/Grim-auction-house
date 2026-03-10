@@ -27,14 +27,14 @@ const Auction = () => {
       FETCH AUCTION
   ========================= */
 
-  // useEffect(() => {
-  //   const fetchAuction = async () => {
-  //     const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
-  //     setAuction(res.data.auction);
-  //   };
+  useEffect(() => {
+    const fetchAuction = async () => {
+      const res = await axios.get(`${BASE_AUCTION_URL}/${id}`);
+      setAuction(res.data.auction);
+    };
 
-  //   fetchAuction();
-  // }, [id]);
+    fetchAuction();
+  }, [id]);
 
 
 
@@ -306,7 +306,7 @@ const Auction = () => {
           </div>
 
           {/* END BUTTON */}
-          {(storedUser?._id === auction.user || storedUser?.id === auction.user) && !isAuctionEnded && (
+          {storedUser?._id === auction.user || storedUser?.id === auction.user && !isAuctionEnded && (
             <button
               onClick={handleEndAuction}
               className="bg-red-600 text-white px-6 py-2 rounded-lg mb-6"
