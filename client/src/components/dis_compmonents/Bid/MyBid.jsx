@@ -78,7 +78,7 @@ const MyBids = () => {
         },
       );
 
-      alert("Bid Increased Successfully 🚀");
+      toast.success("Bid Increased Successfully 🚀");
 
       // 🔥 Refresh without reload
       fetchMyBids();
