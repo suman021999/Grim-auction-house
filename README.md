@@ -15,26 +15,26 @@ The platform allows **admins to manage auctions**, while **users can create auct
 # 🚀 Live Demo
 
 Frontend:  
-https://your-frontend-url.com
+[https://your-frontend-url.com](https://grim-auction-house.vercel.app)
 
 Backend API:  
-https://your-backend-url.com
+[https://your-backend-url.com](https://grim-auction-house.onrender.com)
 
 ---
 
 # 📸 Screenshots
 
 ### Home Page
-![Home](screenshots/home.png)
+![Admin](![Admin](client/public/website%20ui/admin.png))
 
 ### Auction Page
-![Auction](screenshots/auction.png)
+![Auction](![Auction](client/public/website%20ui/Auction.png))
 
 ### Bidding Interface
-![Bidding](screenshots/bidding.png)
+![Bidding](![Mybids](client/public/website%20ui/Mybids.png))
 
-### Chat System
-![Chat](screenshots/chat.png)
+### Message System
+![Message](![Messages](client/public/website%20ui/Messages.png))
 
 *(Create a `screenshots` folder in your repo and add images)*
 
@@ -208,7 +208,7 @@ Real-time updates include:
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/auction-house.git
+git clone https://github.com/suman021999/Grim-auction-house.git
 cd auction-house
 ```
 
@@ -249,15 +249,8 @@ npm run dev
 Create `.env` file inside **server**
 
 ```
-PORT=5000
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_secret
+PORT=8000
 
-GOOGLE_CLIENT_ID=your_google_client_id
-
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_key
-CLOUDINARY_API_SECRET=your_secret
 ```
 
 ---
@@ -293,7 +286,7 @@ auction-house
 ### Register User
 
 ```
-POST /api/auth/register
+POST /api/v1/auth/register
 ```
 
 Body:
@@ -311,7 +304,7 @@ Body:
 ### Login
 
 ```
-POST /api/auth/login
+POST /api/v1/auth/login
 ```
 
 ---
@@ -329,7 +322,7 @@ POST /api/auction/create
 ### Get All Auctions
 
 ```
-GET /api/auction
+GET /api/v1/auction
 ```
 
 ---
@@ -337,7 +330,7 @@ GET /api/auction
 ### Place Bid
 
 ```
-POST /api/bid
+POST /api/v1/bid
 ```
 
 ---
