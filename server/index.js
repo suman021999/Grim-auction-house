@@ -25,7 +25,7 @@ const server = createServer(app);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://grim-auction-house-ph6a.vercel.app",
+  "https://grim-auction-house.vercel.app",
 ];
 
 const corsOptions = {
@@ -50,7 +50,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:5173",
-      "https://grim-auction-house-ph6a.vercel.app",
+      "https://grim-auction-house.vercel.app",
     ],
     methods: ["GET", "POST"],
     credentials: true,
