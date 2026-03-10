@@ -25,16 +25,16 @@ Backend API:
 # 📸 Screenshots
 
 ### Home Page
-![Admin](![Admin](client/public/website%20ui/admin.png))
+![Admin](client/public/website%20ui/admin.png)
 
 ### Auction Page
-![Auction](![Auction](client/public/website%20ui/Auction.png))
+![Auction](client/public/website%20ui/Auction.png)
 
 ### Bidding Interface
-![Bidding](![Mybids](client/public/website%20ui/Mybids.png))
+![Bidding](client/public/website%20ui/Mybids.png)
 
 ### Message System
-![Message](![Messages](client/public/website%20ui/Messages.png))
+![Message](client/public/website%20ui/Messages.png)
 
 *(Create a `screenshots` folder in your repo and add images)*
 
